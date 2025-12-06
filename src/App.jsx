@@ -16,6 +16,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import EventsPage from './components/EventsPage';
 import Members from './components/Members';
+import Community from './components/Community';
+import ScrollToTop from './components/ScrollToTop';
 
 const Home = () => (
     <>
@@ -38,6 +40,7 @@ const Home = () => (
 function App() {
     return (
         <Router>
+            <ScrollToTop />
             <div className="min-h-screen bg-white font-sans">
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -45,6 +48,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/events" element={<EventsPage />} />
                     <Route path="/members" element={<Members />} />
+                    <Route path="/community" element={<Community />} />
                 </Routes>
             </div>
         </Router>

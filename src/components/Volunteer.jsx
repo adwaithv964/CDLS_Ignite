@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import InterestedIndividualForm from './InterestedIndividualForm';
 
 const Volunteer = () => {
+    const [showForm, setShowForm] = useState(false);
+
     return (
         <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
 
@@ -64,7 +67,10 @@ const Volunteer = () => {
                         </div>
 
                         <div className="relative inline-block">
-                            <button className="bg-[#22C59E] hover:bg-teal-600 text-white px-10 py-4 rounded-full font-bold transition-colors flex items-center shadow-xl shadow-teal-500/30 text-base lg:text-lg">
+                            <button
+                                onClick={() => setShowForm(true)}
+                                className="bg-[#22C59E] hover:bg-teal-600 text-white px-10 py-4 rounded-full font-bold transition-colors flex items-center shadow-xl shadow-teal-500/30 text-base lg:text-lg"
+                            >
                                 Join Our Team <ArrowRight size={20} className="ml-3" />
                             </button>
                             {/* Graduation Cap Doodle - Positioning relative to button area or container */}
@@ -113,6 +119,21 @@ const Volunteer = () => {
 
                 </div>
             </div>
+            {/* Modal Overlay */}
+            {showForm && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="relative w-full max-w-4xl my-8">
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <InterestedIndividualForm
+                                onClose={() => setShowForm(false)}
+                                messagePlaceholder="Tell Us About Your Interests.."
+                            />
+                        </div>
+                    </div>
+                    {/* Click outside to close */}
+                    <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
+                </div>
+            )}
         </section>
     );
 };

@@ -91,6 +91,33 @@ const Members = () => {
         }
     ];
 
+    const mentors = [
+        {
+            id: 1,
+            name: "Asha",
+            role: "M.A.M.O college Mukkam",
+            image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600",
+        },
+        {
+            id: 2,
+            name: "Akshay S",
+            role: "I.H.R.D Thamarassery",
+            image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600",
+        },
+        {
+            id: 3,
+            name: "Jimmy Sifuentes",
+            role: "Teacher",
+            image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=600",
+        },
+        {
+            id: 4,
+            name: "Micheal Hammond",
+            role: "Teacher",
+            image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&q=80&w=600",
+        }
+    ];
+
     return (
         <div className="font-sans text-gray-800 bg-gray-50 min-h-screen flex flex-col">
             <Header />
@@ -212,6 +239,51 @@ const Members = () => {
 
                                             <h3 className="text-lg font-bold text-[#1B2A41] mb-1">{worker.name}</h3>
                                             <p className="text-[#F15A29] text-sm font-medium">{worker.role}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Mentors Section */}
+                {activeTab === 'mentors' && (
+                    <div className="bg-[#FFFBF0] py-16 px-4 animate-fade-in">
+                        <div className="container mx-auto max-w-6xl">
+                            <div className="mb-12">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="bg-[#F15A29] p-1 rounded">
+                                        <GraduationCap size={16} className="text-white" />
+                                    </div>
+                                    <span className="text-[#F15A29] font-bold uppercase tracking-wider text-sm">Mentors</span>
+                                </div>
+                                <h2 className="text-4xl font-bold text-[#1B2A41] mb-2 leading-tight">
+                                    Meet The Mentors: Guiding<br />Lights Of CDLS
+                                </h2>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {mentors.map((mentor) => (
+                                    <div key={mentor.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden group">
+                                        {/* Image Container */}
+                                        <div className="relative aspect-[4/5] overflow-hidden">
+                                            <img
+                                                src={mentor.image}
+                                                alt={mentor.name}
+                                                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                            />
+                                        </div>
+
+                                        {/* Content */}
+                                        <div className="relative p-6 pt-8">
+                                            {/* Floating Button */}
+                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-600 transition-colors z-20 flex items-center gap-1">
+                                                View
+                                            </button>
+
+                                            <h3 className="text-lg font-bold text-[#1B2A41] mb-1">{mentor.name}</h3>
+                                            <p className="text-[#F15A29] text-sm font-medium">{mentor.role}</p>
                                         </div>
                                     </div>
                                 ))}

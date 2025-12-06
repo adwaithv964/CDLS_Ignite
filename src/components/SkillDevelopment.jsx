@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Clock, MapPin, Bell, Hexagon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const SkillDevelopment = () => {
 
@@ -89,9 +90,9 @@ const SkillDevelopment = () => {
                             Programs For <span className="text-[#F15A29]">Learner Members</span>
                         </h2>
                     </div>
-                    <button className="hidden md:flex bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors items-center shadow-lg shadow-teal-500/30">
+                    <Link to="/events" className="hidden md:flex bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors items-center shadow-lg shadow-teal-500/30">
                         Explore Events <ArrowRight size={18} className="ml-2" />
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Cards Grid */}
@@ -157,9 +158,9 @@ const SkillDevelopment = () => {
 
                 {/* Mobile Button */}
                 <div className="mt-12 md:hidden flex justify-center">
-                    <button className="bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30">
+                    <Link to="/events" className="bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30">
                         Explore Events <ArrowRight size={18} className="ml-2" />
-                    </button>
+                    </Link>
                 </div>
 
             </div>

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Ticket } from 'lucide-react';
 import asterisk from '../assets/asterisk.png';
+import HostEventForm from './HostEventForm';
 
 const Events = () => {
+    const [showForm, setShowForm] = useState(false);
     return (
         <section className="py-20 bg-white relative overflow-hidden">
             {/* Top Left Decorative Red Curve - Abstract representation */}
@@ -56,7 +58,10 @@ const Events = () => {
                                 </svg>
                             </div>
 
-                            <button className="bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-xl flex items-center group">
+                            <button
+                                onClick={() => setShowForm(true)}
+                                className="bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-xl flex items-center group"
+                            >
                                 Host An Event
                                 <span className="bg-white/20 rounded-full p-1 ml-3 group-hover:translate-x-1 transition-transform">
                                     <ArrowRight size={16} />
@@ -111,6 +116,18 @@ const Events = () => {
                     </div>
                 </div>
             </div>
+            {/* Modal Overlay */}
+            {showForm && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="relative w-full max-w-4xl my-8">
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <HostEventForm onClose={() => setShowForm(false)} />
+                        </div>
+                    </div>
+                    {/* Click outside to close */}
+                    <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
+                </div>
+            )}
         </section>
     );
 };

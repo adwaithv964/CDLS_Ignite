@@ -51,9 +51,14 @@ const StartupNetwork = () => {
                             <p className="text-gray-300 text-sm leading-relaxed mb-8 max-w-xs font-medium">
                                 Empowering Students With Personalized Mentorship And Innovative Online Learning For Every Child's Unique Journey.
                             </p>
-                            <button className="bg-[#2DD4BF] hover:bg-teal-300 text-[#0b132b] px-6 py-2 rounded-full font-bold transition-transform transform hover:-translate-y-1 inline-flex items-center w-max text-sm">
+                            <a
+                                href="https://mashmagicedu.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-[#2DD4BF] hover:bg-teal-300 text-[#0b132b] px-6 py-2 rounded-full font-bold transition-transform transform hover:-translate-y-1 inline-flex items-center w-max text-sm"
+                            >
                                 Know More <ArrowRight size={16} className="ml-2" />
-                            </button>
+                            </a>
                         </div>
 
                         <div className="w-[45%] h-full relative">
@@ -79,9 +84,14 @@ const StartupNetwork = () => {
                             <p className="text-white font-semibold text-sm leading-relaxed mb-8 max-w-xs">
                                 NoteAI Is Kerala's First Student-Led AI Edtech Startup, Founded By 20-Year-Old Entrepreneur And Educator Ansar MP
                             </p>
-                            <button className="bg-[#0F172A] hover:bg-gray-800 text-white px-6 py-2 rounded-full font-bold transition-transform transform hover:-translate-y-1 inline-flex items-center w-max text-sm">
+                            <a
+                                href="https://www.noteai.in/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-[#0F172A] hover:bg-gray-800 text-white px-6 py-2 rounded-full font-bold transition-transform transform hover:-translate-y-1 inline-flex items-center w-max text-sm"
+                            >
                                 Know More <ArrowRight size={16} className="ml-2" />
-                            </button>
+                            </a>
                         </div>
 
                         <div className="w-[45%] h-full relative">

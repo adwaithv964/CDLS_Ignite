@@ -1,7 +1,10 @@
 import React from 'react';
 import { ArrowRight, ChevronRight, Gem } from 'lucide-react';
+import InterestedIndividualForm from './InterestedIndividualForm';
 
 const CoWorks = () => {
+    const [showForm, setShowForm] = React.useState(false);
+
     return (
         <section className="py-20 bg-white overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,12 +85,31 @@ const CoWorks = () => {
                             businesses a collaborative hub for ideas, projects, and growth.
                         </p>
 
-                        <button className="bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30">
+                        <button
+                            onClick={() => setShowForm(true)}
+                            className="bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30"
+                        >
                             Apply Now <ArrowRight size={18} className="ml-2" />
                         </button>
                     </div>
                 </div>
             </div>
+
+            {/* Modal Overlay */}
+            {showForm && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="relative w-full max-w-4xl my-8">
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <InterestedIndividualForm
+                                onClose={() => setShowForm(false)}
+                                messagePlaceholder="Tell Us About Your Company.."
+                            />
+                        </div>
+                    </div>
+                    {/* Click outside to close */}
+                    <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
+                </div>
+            )}
         </section>
     );
 };
