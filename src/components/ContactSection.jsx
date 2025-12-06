@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import asterisk from '../assets/asterisk.png';
+const asterisk = "/assets/asterisk.png";
 
 const ContactSection = () => {
     return (
