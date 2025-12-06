@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Menu, X, Mail, Phone, Facebook, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
+
+    const isActive = (path) => {
+        return location.pathname === path ? "text-[#F15A29]" : "text-[#1B2A41] hover:text-[#F15A29]";
+    };
 
     return (
         <div className="flex flex-col w-full z-50">
@@ -49,9 +54,9 @@ const Header = () => {
 
                         {/* Desktop Menu - Centered */}
                         <div className="hidden md:flex items-center space-x-8">
-                            <Link to="/" className="text-[#1B2A41] hover:text-[#F15A29] font-medium transition-colors">Home</Link>
-                            <Link to="/events" className="text-[#1B2A41] hover:text-[#F15A29] font-medium transition-colors">Events</Link>
-                            <a href="#" className="text-[#1B2A41] hover:text-[#F15A29] font-medium transition-colors">Members</a>
+                            <Link to="/" className={`${isActive('/')} font-medium transition-colors`}>Home</Link>
+                            <Link to="/events" className={`${isActive('/events')} font-medium transition-colors`}>Events</Link>
+                            <Link to="/members" className={`${isActive('/members')} font-medium transition-colors`}>Members</Link>
                             <a href="#" className="text-[#1B2A41] hover:text-[#F15A29] font-medium transition-colors">Community</a>
                             <a href="#" className="text-[#1B2A41] hover:text-[#F15A29] font-medium transition-colors">CDLS</a>
                         </div>
@@ -82,9 +87,9 @@ const Header = () => {
                 {isOpen && (
                     <div className="md:hidden bg-white border-t">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-[#F15A29] bg-orange-50">Home</Link>
-                            <Link to="/events" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Events</Link>
-                            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Members</a>
+                            <Link to="/" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Home</Link>
+                            <Link to="/events" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/events' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Events</Link>
+                            <Link to="/members" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/members' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Members</Link>
                             <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Community</a>
                             <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">CDLS</a>
                             <div className="px-3 py-2 flex flex-col space-y-3 mt-4 border-t pt-4">

@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import Register from './components/Register';
 import Login from './components/Login';
 import EventsPage from './components/EventsPage';
+import Members from './components/Members';
 
 const Home = () => (
     <>
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/events" element={<EventsPage />} />
+                    <Route path="/members" element={<Members />} />
                 </Routes>
             </div>
         </Router>
