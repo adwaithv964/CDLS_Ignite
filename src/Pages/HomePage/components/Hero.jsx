@@ -50,10 +50,10 @@ const Hero = () => {
                                 <span className="text-xs font-semibold text-gray-600">Learners</span>
                             </div>
                             <div className="flex -space-x-2">
-                                <div className="w-8 h-8 rounded-full bg-blue-400 border-2 border-white"></div>
-                                <div className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-white"></div>
-                                <div className="w-8 h-8 rounded-full bg-red-400 border-2 border-white"></div>
-                                <div className="w-8 h-8 rounded-full bg-[#1B2A41] border-2 border-white flex items-center justify-center text-[10px] text-white">+</div>
+                                <img src="/assets/image_2.png" alt="Learner 1" className="w-8 h-8 rounded-full border-2 border-white object-cover transition-transform hover:scale-110 hover:z-10 relative cursor-pointer" />
+                                <img src="/assets/image_1.png" alt="Learner 2" className="w-8 h-8 rounded-full border-2 border-white object-cover transition-transform hover:scale-110 hover:z-10 relative cursor-pointer" />
+                                <img src="/assets/usman_profile.png" alt="Learner 3" className="w-8 h-8 rounded-full border-2 border-white object-cover transition-transform hover:scale-110 hover:z-10 relative cursor-pointer" />
+                                <div className="w-8 h-8 rounded-full bg-[#1B2A41] border-2 border-white flex items-center justify-center text-[10px] text-white transition-transform hover:scale-110 hover:z-10 relative cursor-pointer">+</div>
                             </div>
                         </div>
 
@@ -61,15 +61,22 @@ const Hero = () => {
                         <div className="absolute bottom-0 left-10 w-48 h-64 bg-purple-200 rounded-t-[100px] rounded-b-[100px] overflow-hidden border-2 border-white shadow-xl z-10 transform translate-y-8 hover:translate-y-6 transition-transform">
                             {/* Placeholder for image */}
                             <div className="w-full h-full bg-gradient-to-b from-[#E0D4FC] to-[#C4B5FD] flex items-end justify-center">
-                                <div className="w-32 h-40 bg-purple-300 rounded-t-full opacity-50"></div>
+                                <img
+                                    src="/assets/image_1.png"
+                                    alt="Student with books"
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                         </div>
 
                         {/* Image 2 - Boy with Backpack (Large Blob shape) */}
-                        <div className="absolute top-0 right-10 w-64 h-96 bg-blue-100 rounded-full border-4 border-white shadow-2xl overflow-hidden z-0">
+                        <div className="absolute top-0 right-10 w-64 h-96 bg-blue-100 rounded-full border-4 border-white shadow-2xl overflow-hidden z-0 transition-transform duration-300 hover:-translate-y-2">
                             <div className="w-full h-full bg-[#3B82F6] flex items-end justify-center overflow-hidden">
-                                {/* Placeholder for student image */}
-                                <div className="w-full h-3/4 bg-blue-500 opacity-20"></div>
+                                <img
+                                    src="/assets/image_2.png"
+                                    alt="Student with backpack"
+                                    className="w-full h-full object-cover object-bottom"
+                                />
                             </div>
                             {/* SVG Blob mask effect simulation (simple circle for now as base) */}
                         </div>

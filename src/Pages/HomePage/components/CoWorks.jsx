@@ -23,10 +23,11 @@ const CoWorks = () => {
 
                         {/* Image 1: Vertical - Girl with Books */}
                         <div className="absolute top-0 left-0 w-64 h-96 bg-gray-200 z-10 overflow-hidden shadow-lg">
-                            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                                {/* Placeholder */}
-                                <div className="text-gray-400 text-xs">Image 1</div>
-                            </div>
+                            <img
+                                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80"
+                                alt="Co-working collaborative space"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
 
                         {/* Floating Badge: 35+ Co-workers */}
@@ -50,10 +51,11 @@ const CoWorks = () => {
 
                         {/* Image 2: Horizontal - Two Girls */}
                         <div className="absolute bottom-0 right-0 w-72 h-64 bg-gray-200 z-10 overflow-hidden shadow-lg border-8 border-white">
-                            <div className="w-full h-full bg-gradient-to-tl from-orange-100 to-yellow-100 flex items-center justify-center">
-                                {/* Placeholder */}
-                                <div className="text-gray-400 text-xs">Image 2</div>
-                            </div>
+                            <img
+                                src="https://m.media-amazon.com/images/I/51+6B4s2t6L._SY350_.jpg"
+                                alt="Woman working in office"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
 
                     </div>

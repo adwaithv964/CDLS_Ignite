@@ -19,7 +19,8 @@ const SkillDevelopment = () => {
             dept: "Department of Robotics: NIT Calicut",
             status: "Open",
             isOpen: true,
-            imageColor: "bg-blue-100" // Placeholder for image background
+            imageColor: "bg-blue-100", // Placeholder for image background
+            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
         },
         {
             id: 2,
@@ -34,7 +35,8 @@ const SkillDevelopment = () => {
             dept: "Department of Robotics: NIT Calicut",
             status: "Closed",
             isOpen: false,
-            imageColor: "bg-sky-100"
+            imageColor: "bg-sky-100",
+            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
         },
         {
             id: 3,
@@ -49,7 +51,8 @@ const SkillDevelopment = () => {
             dept: "Department of Robotics: NIT Calicut",
             status: "Open",
             isOpen: true,
-            imageColor: "bg-yellow-100"
+            imageColor: "bg-yellow-100",
+            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
         }
     ];
 
@@ -102,8 +105,11 @@ const SkillDevelopment = () => {
 
                             {/* Image Area */}
                             <div className={`h-48 rounded-sm mb-6 relative overflow-hidden ${session.imageColor} flex items-center justify-center`}>
-                                {/* Placeholder for image */}
-                                <div className="text-gray-400 font-bold opacity-30 text-xl uppercase tracking-widest">Image</div>
+                                {session.image ? (
+                                    <img src={session.image} alt={session.title} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="text-gray-400 font-bold opacity-30 text-xl uppercase tracking-widest">Image</div>
+                                )}
                                 <div className="absolute top-4 left-4">
                                     <span className={`${session.tagColor} text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm`}>
                                         {session.tag}

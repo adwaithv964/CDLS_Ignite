@@ -19,7 +19,9 @@ const EventsPage = () => {
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
             status: "Open",
-            isOpen: true
+            isOpen: true,
+            imageColor: "bg-blue-100",
+            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
         },
         {
             id: 2,
@@ -33,7 +35,9 @@ const EventsPage = () => {
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
             status: "Closed",
-            isOpen: false
+            isOpen: false,
+            imageColor: "bg-sky-100",
+            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
         },
         {
             id: 3,
@@ -47,7 +51,9 @@ const EventsPage = () => {
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
             status: "Open",
-            isOpen: true
+            isOpen: true,
+            imageColor: "bg-yellow-100",
+            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
         }
     ];
 
@@ -63,6 +69,8 @@ const EventsPage = () => {
             location: "CDLS Office",
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
+            imageColor: "bg-blue-100",
+            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
         },
         {
             id: 102,
@@ -75,6 +83,8 @@ const EventsPage = () => {
             location: "CDLS Office",
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
+            imageColor: "bg-sky-100",
+            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
         },
         {
             id: 103,
@@ -87,6 +97,8 @@ const EventsPage = () => {
             location: "CDLS Office",
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
+            imageColor: "bg-yellow-100",
+            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
         },
         {
             id: 104,
@@ -99,6 +111,8 @@ const EventsPage = () => {
             location: "CDLS Office",
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
+            imageColor: "bg-blue-100",
+            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
         },
         {
             id: 105,
@@ -111,6 +125,8 @@ const EventsPage = () => {
             location: "CDLS Office",
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
+            imageColor: "bg-sky-100",
+            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
         },
         {
             id: 106,
@@ -123,15 +139,28 @@ const EventsPage = () => {
             location: "CDLS Office",
             author: "Sara Francis",
             dept: "Department of Robotics: NIT Calicut",
+            imageColor: "bg-yellow-100",
+            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
         }
     ];
 
     const renderCard = (session, isEarlier = false) => (
         <div key={session.id} className="bg-white p-6 rounded-none shadow-sm h-full flex flex-col justify-between hover:shadow-md transition-shadow border border-gray-100">
             <div>
-                <span className={`${session.typeColor} text-white text-[10px] font-bold px-3 py-1 rounded-sm inline-block mb-12`}>
-                    {session.type}
-                </span>
+                {/* Image Area */}
+                <div className={`h-48 rounded-sm mb-6 relative overflow-hidden ${session.imageColor || 'bg-gray-100'} flex items-center justify-center`}>
+                    {session.image ? (
+                        <img src={session.image} alt={session.title} className="w-full h-full object-cover" />
+                    ) : (
+                        <div className="text-gray-400 font-bold opacity-30 text-xl uppercase tracking-widest">Image</div>
+                    )}
+                    <div className="absolute top-4 left-4">
+                        <span className={`${session.typeColor} text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm`}>
+                            {session.type}
+                        </span>
+                    </div>
+                </div>
+
                 <div className="mb-4">
                     <span className="text-xs font-semibold text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded">Registrations: {session.registrations}</span>
                 </div>
