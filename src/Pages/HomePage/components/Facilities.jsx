@@ -42,23 +42,23 @@ const Facilities = () => {
     return (
         <section className="py-20 lg:py-28 bg-[#F9FAFB] relative overflow-hidden">
 
-            {/* Background Doodles (Simulated with Faint Icons) */}
+            {/* Background doodles */}
             <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none select-none overflow-hidden text-gray-900">
-                {/* Top Left */}
+                {/* Floating icons */}
                 <div className="absolute top-10 left-10 transform -rotate-12"><Heart size={120} strokeWidth={1} /></div>
                 <div className="absolute top-40 left-32 transform rotate-45"><Pencil size={80} strokeWidth={1} /></div>
 
-                {/* Top Center-ish */}
+
                 <div className="absolute top-10 left-1/3 transform -rotate-6"><Lightbulb size={100} strokeWidth={1} /></div>
 
-                {/* Top Right */}
+
                 <div className="absolute top-20 right-20 transform rotate-12"><Bot size={110} strokeWidth={1} /></div>
                 <div className="absolute top-60 right-10 transform -rotate-12"><Cloud size={90} strokeWidth={1} /></div>
 
-                {/* Bottom Left */}
+
                 <div className="absolute bottom-20 left-10 transform rotate-12"><div className="text-9xl font-serif border border-gray-900 rounded-full w-40 h-40 flex items-center justify-center">G</div></div>
 
-                {/* Bottom Right */}
+
                 <div className="absolute bottom-10 right-1/4 transform -rotate-6"><div className="text-6xl font-sans opacity-50">ABC</div></div>
                 <div className="absolute bottom-40 right-20 transform rotate-45"><Pencil size={60} strokeWidth={1} /></div>
             </div>

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { ArrowRight, Ticket } from 'lucide-react';
-const asterisk = "/assets/asterisk.png";
+const starGreen = "/assets/star_green.png";
 import HostEventForm from '../../EventsPage/components/HostEventForm';
 
 const Events = () => {
     const [showForm, setShowForm] = useState(false);
     return (
         <section className="py-20 bg-white relative overflow-hidden">
-            {/* Top Left Decorative Red Curve - Abstract representation */}
+            {/* Decorative curved element */}
             <div className="absolute top-10 left-10 md:left-20 w-12 h-12 border-t-4 border-l-4 border-red-500 rounded-tl-full opacity-80" style={{ transform: 'rotate(-15deg)' }}></div>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-                    {/* Left Column: Content */}
+                    {/* Event details section */}
                     <div className="relative">
-                        {/* Chevron Pattern - floated or absolute near title */}
+                        {/* Decorative pattern */}
                         <div className="absolute -top-16 left-1/3 opacity-20 hidden md:block">
                             <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
                                 <path d="M10 10 L 20 20 L 10 30" stroke="currentColor" strokeWidth="2" />
@@ -50,7 +50,7 @@ const Events = () => {
                         </div>
 
                         <div className="mt-10 relative">
-                            {/* Graduation Cap Decorative Element (SVG) */}
+                            {/* Decorative icon */}
                             <div className="absolute -right-8 -top-12 opacity-30 pointer-events-none hidden md:block">
                                 <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#4fd1c5" strokeWidth="1" className="transform rotate-12">
                                     <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" />
@@ -70,9 +70,9 @@ const Events = () => {
                         </div>
                     </div>
 
-                    {/* Right Column: Images & Decoration */}
+                    {/* Event visuals section */}
                     <div className="relative">
-                        {/* Dotted Grid Pattern (Top Left) */}
+                        {/* Background pattern */}
                         <div className="absolute -top-12 -left-12 w-32 h-32 opacity-60 z-0">
                             <svg width="100%" height="100%" fill="none">
                                 <pattern id="dotGrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -82,14 +82,14 @@ const Events = () => {
                             </svg>
                         </div>
 
-                        {/* Green Asterisk (Top Right) */}
+                        {/* Decorative asterisk */}
                         <div className="absolute -top-10 -right-10 z-20 w-16 h-16 animate-spin-slow">
-                            <img src={asterisk} alt="" className="w-full text-[#10b981]" style={{ filter: 'hue-rotate(90deg) brightness(1.2)' }} />
+                            <img src={starGreen} alt="" className="w-full" />
                         </div>
 
-                        {/* Main Image Container */}
+                        {/* Image wrapper */}
                         <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl bg-gray-100 pb-[10%] pr-[5%]">
-                            {/* Using a placeholder image for now as specific asset wasn't found */}
+                            {/* Event image */}
                             <img
                                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80"
                                 alt="Students collaborating"
@@ -102,30 +102,30 @@ const Events = () => {
                             <div className="absolute inset-0 bg-transparent rounded-3xl pointer-events-none"></div>
                         </div>
 
-                        {/* Red Border Shape Overlay (Bottom Right) */}
-                        <div className="absolute bottom-0 right-0 w-1/3 h-1/3 z-20 pointer-events-none translate-x-4 translate-y-4">
-                            {/* This is the red outline shape */}
-                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-lg">
+                        {/* Decorative border overlay */}
+                        <div className="absolute bottom-10 right-0 w-1/3 h-1/3 z-20 pointer-events-none translate-x-4">
+                            {/* Outline shape */}
+                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-lg rotate-180">
                                 <path d="M10 10 H 90 V 90 H 50 V 60 H 10 V 10" stroke="#ff5722" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                             </svg>
                         </div>
 
-                        {/* White box overlay inside the red shape */}
-                        <div className="absolute bottom-4 right-2 w-24 h-20 bg-white rounded-lg z-30 shadow-sm hidden md:block"></div>
+
 
                     </div>
                 </div>
             </div>
-            {/* Modal Overlay */}
+            {/* Event registration modal */}
             {showForm && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-                    <div className="relative w-full max-w-4xl my-8">
-                        <div onClick={(e) => e.stopPropagation()}>
-                            <HostEventForm onClose={() => setShowForm(false)} />
+                <div className="relative z-50">
+                    <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+                    <div className="fixed inset-0 z-50 w-screen overflow-y-auto" onClick={() => setShowForm(false)}>
+                        <div className="flex min-h-full items-center justify-center p-4">
+                            <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+                                <HostEventForm onClose={() => setShowForm(false)} />
+                            </div>
                         </div>
                     </div>
-                    {/* Click outside to close */}
-                    <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
                 </div>
             )}
         </section>

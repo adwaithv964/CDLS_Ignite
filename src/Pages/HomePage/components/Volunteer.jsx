@@ -8,13 +8,13 @@ const Volunteer = () => {
     return (
         <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
 
-            {/* Top Right Decorative Curves */}
+            {/* Decorative background elements */}
             <div className="absolute top-0 right-0 z-0 pointer-events-none">
-                {/* Large Red Curve */}
+                {/* Red floral curve */}
                 <svg width="450" height="450" viewBox="0 0 400 400" fill="none" className="absolute top-0 right-0 transform translate-x-[25%] -translate-y-[25%]">
                     <path d="M50 0 C 50 180 180 350 400 350" stroke="#F15A29" strokeWidth="45" strokeLinecap="round" />
                 </svg>
-                {/* Thin Green Curve */}
+                {/* Green accent curve */}
                 <svg width="550" height="550" viewBox="0 0 500 500" fill="none" className="absolute top-0 right-0 transform translate-x-[15%] -translate-y-[15%] opacity-100">
                     <path d="M0 100 C 150 100 350 200 500 450" stroke="#10B981" strokeWidth="2" />
                 </svg>
@@ -23,10 +23,10 @@ const Volunteer = () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24">
 
-                    {/* Left Content */}
+                    {/* Main textual content */}
                     <div className="w-full lg:w-1/2 relative lg:pr-8">
 
-                        {/* Dot Pattern - Behind Title (Top Right of Text) */}
+                        {/* Texture pattern behind title */}
                         <div className="absolute -top-16 right-0 lg:right-4 flex flex-wrap w-28 h-28 gap-3 opacity-20 -z-10 bg-dotted-pattern">
                             <div className="grid grid-cols-5 gap-3">
                                 {[...Array(25)].map((_, i) => (
@@ -35,7 +35,7 @@ const Volunteer = () => {
                             </div>
                         </div>
 
-                        {/* Tag */}
+                        {/* Tagline */}
                         <div className="flex items-center space-x-3 mb-6">
                             <span className="text-[#00D2AA]">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,11 +69,14 @@ const Volunteer = () => {
                         <div className="relative inline-block">
                             <button
                                 onClick={() => setShowForm(true)}
-                                className="bg-[#22C59E] hover:bg-teal-600 text-white px-10 py-4 rounded-full font-bold transition-colors flex items-center shadow-xl shadow-teal-500/30 text-base lg:text-lg"
+                                className="bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-xl flex items-center group"
                             >
-                                Join Our Team <ArrowRight size={20} className="ml-3" />
+                                Join Our Team
+                                <span className="bg-white/20 rounded-full p-1 ml-3 group-hover:translate-x-1 transition-transform">
+                                    <ArrowRight size={16} />
+                                </span>
                             </button>
-                            {/* Graduation Cap Doodle - Positioning relative to button area or container */}
+                            {/* Decorative doodle */}
                             <div className="absolute top-[130%] -left-12 w-32 h-32 text-blue-200/60 hidden lg:block transform -rotate-12 pointer-events-none">
                                 <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
                                     <path d="M10 40 L50 25 L90 40 L50 55 Z" />
@@ -86,26 +89,23 @@ const Volunteer = () => {
                         </div>
                     </div>
 
-                    {/* Right Visuals */}
-                    {/* Added pr-16 again to maintain the 'dragged left' feel but with larger elements */}
+                    {/* Right side image composition */}
                     <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end mt-16 lg:mt-0 lg:pr-16">
-                        <div className="relative w-full max-w-[450px] lg:max-w-[500px]"> {/* Increased max-width */}
+                        <div className="relative w-full max-w-[450px] lg:max-w-[500px]">
 
-                            {/* Orange Frame Background */}
+                            {/* Decorative frame */}
                             <div className="absolute top-8 -right-8 w-full h-full bg-[#F15A29] rounded-sm z-0"></div>
 
-                            {/* Image Container */}
+                            {/* Main image container */}
                             <div className="relative z-10 w-full aspect-[4/5] bg-gray-200 overflow-hidden shadow-2xl rounded-sm">
-                                <div className="w-full h-full bg-gradient-to-t from-gray-300 to-gray-100 flex items-center justify-center">
-                                    {/* Placeholder Text */}
-                                    <div className="text-gray-500 font-bold text-lg text-center px-8">
-                                        [Student Image]<br />
-                                        <span className="text-base font-normal opacity-75">Replace with actual image</span>
-                                    </div>
-                                </div>
+                                <img
+                                    src="/assets/image_3.jpg"
+                                    alt="Students analyzing data together"
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
 
-                            {/* Dot Pattern - Bottom Left of Image */}
+                            {/* Texture pattern overlay */}
                             <div className="absolute -bottom-12 -left-12 z-20">
                                 <div className="grid grid-cols-6 gap-3">
                                     {[...Array(24)].map((_, i) => (
@@ -119,7 +119,7 @@ const Volunteer = () => {
 
                 </div>
             </div>
-            {/* Modal Overlay */}
+            {/* Modal for interested individuals */}
             {showForm && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
                     <div className="relative w-full max-w-4xl my-8">
@@ -130,7 +130,7 @@ const Volunteer = () => {
                             />
                         </div>
                     </div>
-                    {/* Click outside to close */}
+                    {/* Close modal on outside click */}
                     <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
                 </div>
             )}

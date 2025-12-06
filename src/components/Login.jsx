@@ -6,20 +6,20 @@ const Login = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
             <div className="w-full max-w-md relative">
-                {/* Close Button */}
+                {/* Close action */}
                 <Link to="/" className="absolute -top-4 -right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors">
                     <div className="bg-gray-200 hover:bg-gray-300 rounded-md p-1">
                         <X className="w-5 h-5 text-white" />
                     </div>
                 </Link>
 
-                {/* Header */}
+                {/* Login header */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-serif text-gray-800 mb-4">Login</h1>
                     <p className="text-xl font-serif text-gray-800">Hi, Welcome back!</p>
                 </div>
 
-                {/* Google Login */}
+                {/* Google authentication */}
                 <button className="w-full flex items-center justify-center gap-3 bg-white border border-rose-100 rounded-full py-3 mb-8 hover:bg-gray-50 transition-colors">
                     <svg className="w-6 h-6" viewBox="0 0 24 24">
                         <path
@@ -42,14 +42,14 @@ const Login = () => {
                     <span className="text-gray-700 font-medium text-lg">Login with Google</span>
                 </button>
 
-                {/* Divider */}
+                {/* Login method separator */}
                 <div className="flex items-center gap-4 mb-8">
                     <div className="h-px bg-gray-200 flex-1"></div>
                     <span className="text-gray-300 font-serif text-lg">or Login with Email</span>
                     <div className="h-px bg-gray-200 flex-1"></div>
                 </div>
 
-                {/* Form */}
+                {/* Login credentials form */}
                 <form className="space-y-6">
                     <div>
                         <label className="block text-xl font-serif text-gray-800 mb-2">Email</label>
@@ -86,13 +86,13 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-primary hover:bg-teal-600 text-white font-serif font-bold text-xl py-3 rounded-lg shadow-md transition-colors mt-8"
+                        className="w-full bg-primary hover:bg-teal-500 text-white font-serif font-bold text-xl py-3 rounded-lg shadow-md transition-colors mt-8"
                     >
                         Login
                     </button>
                 </form>
 
-                {/* Footer Links */}
+                {/* Registration link */}
                 <div className="text-center mt-6 flex items-center justify-center gap-2">
                     <span className="text-gray-600 text-lg font-serif">Not registered yet?</span>
                     <Link to="/register" className="text-secondary hover:text-orange-600 font-medium text-lg flex items-center gap-1">
@@ -100,7 +100,7 @@ const Login = () => {
                     </Link>
                 </div>
 
-                {/* Bottom Terms */}
+                {/* Terms and privacy links */}
                 <div className="text-center mt-12 mb-4 text-sm text-gray-800">
                     By clicking on 'Login' you agree to the{' '}
                     <a href="#" className="underline hover:text-gray-600">Terms of Service</a>

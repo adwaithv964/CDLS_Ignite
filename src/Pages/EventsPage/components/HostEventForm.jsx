@@ -4,13 +4,13 @@ import { FileText, X, Calendar, Clock } from 'lucide-react';
 const HostEventForm = ({ onClose }) => {
     return (
         <div className="bg-[#0B2136] relative overflow-hidden p-8 md:p-12 rounded-lg max-w-4xl w-full text-white shadow-2xl my-8">
-            {/* Topological Map Background Pattern */}
+            {/* Background pattern */}
             <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
                 backgroundSize: '100px 100px'
             }}></div>
 
-            {/* Close Button */}
+            {/* Close button */}
             {onClose && (
                 <button
                     onClick={onClose}
@@ -21,7 +21,7 @@ const HostEventForm = ({ onClose }) => {
             )}
 
             <div className="relative z-10 w-full">
-                {/* Header */}
+                {/* Modal header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-2 mb-2">
                         <FileText size={18} className="text-[#00D2AA]" />
@@ -32,7 +32,7 @@ const HostEventForm = ({ onClose }) => {
                     </h2>
                 </div>
 
-                {/* Form */}
+                {/* Event form */}
                 <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                     <input
                         type="text"
@@ -50,7 +50,7 @@ const HostEventForm = ({ onClose }) => {
                         className="w-full bg-white text-gray-800 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#00D2AA]"
                     />
 
-                    {/* Event Specific Fields */}
+                    {/* Event details */}
                     <input
                         type="text"
                         placeholder="Event Title"
@@ -110,7 +110,7 @@ const HostEventForm = ({ onClose }) => {
                     <div className="flex justify-end pt-4">
                         <button
                             type="submit"
-                            className="bg-[#00D2AA] hover:bg-teal-600 text-white font-bold py-3 px-8 rounded flex items-center transition-colors uppercase tracking-wide"
+                            className="bg-[#00D2AA] hover:bg-teal-500 text-white font-bold py-3 px-8 rounded flex items-center transition-colors uppercase tracking-wide"
                         >
                             Submit Now
                         </button>

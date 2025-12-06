@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 
 const SkillDevelopment = () => {
 
-    // Data for the sessions
+    /**
+     * Session data for the skill development programs.
+     */
     const sessions = [
         {
             id: 1,
             tag: "Beginners",
-            tagColor: "bg-[#F15A29]", // Orange
+            tagColor: "bg-[#F15A29]",
             registrations: 30,
             title: "Robotics For Daily Life And Innovation",
             date: "10 April",
@@ -19,13 +21,13 @@ const SkillDevelopment = () => {
             dept: "Department of Robotics: NIT Calicut",
             status: "Open",
             isOpen: true,
-            imageColor: "bg-blue-100", // Placeholder for image background
+            imageColor: "bg-blue-100",
             image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
         },
         {
             id: 2,
             tag: "Advanced",
-            tagColor: "bg-[#F43F5E]", // Red/Pink
+            tagColor: "bg-[#F43F5E]",
             registrations: 35,
             title: "Session On Digital Marketing",
             date: "10 April",
@@ -41,7 +43,7 @@ const SkillDevelopment = () => {
         {
             id: 3,
             tag: "Hands-on",
-            tagColor: "bg-[#F15A29]", // Orange
+            tagColor: "bg-[#F15A29]",
             registrations: 5,
             title: "Web Developement For Beginners",
             date: "10 April",
@@ -59,7 +61,7 @@ const SkillDevelopment = () => {
     return (
         <section className="py-20 bg-gray-50 relative overflow-hidden">
 
-            {/* Doodle Background Pattern (Simulated with SVGs) */}
+            {/* Decorative background pattern */}
             <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none overflow-hidden">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -72,7 +74,7 @@ const SkillDevelopment = () => {
                     </defs>
                     <rect width="100%" height="100%" fill="url(#doodle-pattern)" />
                 </svg>
-                {/* Large faint icons positioned absolutely for the "doodle" look */}
+                {/* Floating icons for visual appeal */}
                 <div className="absolute top-10 left-10 text-gray-900 text-9xl transform -rotate-12">★</div>
                 <div className="absolute bottom-10 right-10 text-gray-900 text-9xl transform rotate-12">♫</div>
                 <div className="absolute top-1/2 left-1/4 text-gray-900 text-8xl transform rotate-45">☁</div>
@@ -81,7 +83,7 @@ const SkillDevelopment = () => {
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-                {/* Header */}
+                {/* Section Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16">
                     <div className="max-w-2xl">
                         <div className="flex items-center space-x-2 mb-4">
@@ -93,17 +95,17 @@ const SkillDevelopment = () => {
                             Programs For <span className="text-[#F15A29]">Learner Members</span>
                         </h2>
                     </div>
-                    <Link to="/events" className="hidden md:flex bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors items-center shadow-lg shadow-teal-500/30">
+                    <Link to="/events" className="hidden md:flex bg-[#22C59E] hover:bg-teal-500 text-white px-8 py-3 rounded-full font-medium transition-colors items-center shadow-lg shadow-teal-500/30">
                         Explore Events <ArrowRight size={18} className="ml-2" />
                     </Link>
                 </div>
 
-                {/* Cards Grid */}
+                {/* Session Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {sessions.map((session) => (
                         <div key={session.id} className="bg-white p-5 rounded-sm shadow-sm hover:shadow-lg transition-shadow border border-gray-100 flex flex-col h-full">
 
-                            {/* Image Area */}
+                            {/* Card Image Section */}
                             <div className={`h-48 rounded-sm mb-6 relative overflow-hidden ${session.imageColor} flex items-center justify-center`}>
                                 {session.image ? (
                                     <img src={session.image} alt={session.title} className="w-full h-full object-cover" />
@@ -117,7 +119,7 @@ const SkillDevelopment = () => {
                                 </div>
                             </div>
 
-                            {/* Content */}
+                            {/* Card Content */}
                             <div className="flex-grow">
                                 <div className="mb-3">
                                     <span className="text-[10px] font-bold text-yellow-500 bg-yellow-50 px-2 py-1 rounded">Registrations: {session.registrations}</span>
@@ -136,7 +138,7 @@ const SkillDevelopment = () => {
 
                                 <div className="flex items-start space-x-3 text-[10px] text-gray-500 mb-6">
                                     <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
-                                        {/* Avatar Placeholder */}
+                                        {/* Avatar Icon */}
                                         <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-gray-400 translate-y-1"><path d="M24 24H0V22C0 18 4 15 12 15C20 15 24 18 24 22V24Z" /><circle cx="12" cy="7" r="5" /></svg>
                                     </div>
                                     <div>
@@ -146,7 +148,7 @@ const SkillDevelopment = () => {
                                 </div>
                             </div>
 
-                            {/* Footer */}
+                            {/* Card Footer */}
                             <div className="flex justify-between items-center text-xs mt-auto pt-2">
                                 <span className="font-bold text-[#1B2A41]">{session.status}</span>
                                 {session.isOpen ? (
@@ -162,9 +164,9 @@ const SkillDevelopment = () => {
                     ))}
                 </div>
 
-                {/* Mobile Button */}
+                {/* Mobile Action Button */}
                 <div className="mt-12 md:hidden flex justify-center">
-                    <Link to="/events" className="bg-[#22C59E] hover:bg-teal-600 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30">
+                    <Link to="/events" className="bg-[#22C59E] hover:bg-teal-500 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30">
                         Explore Events <ArrowRight size={18} className="ml-2" />
                     </Link>
                 </div>

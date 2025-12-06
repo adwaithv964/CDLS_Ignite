@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Register = () => {
     return (
         <div className="min-h-screen bg-white flex items-center justify-center p-4 relative">
-            {/* Close button to go back to home */}
+            {/* Close button */}
             <Link to="/" className="absolute top-8 right-8 text-gray-400 hover:text-gray-600">
                 <div className="bg-gray-200 rounded-md p-1">
                     <X size={20} className="text-white" />
@@ -74,7 +74,7 @@ const Register = () => {
 
                         <button
                             type="submit"
-                            className="w-40 mx-auto block bg-primary hover:bg-teal-600 text-white font-bold py-3 rounded-md transition-colors uppercase tracking-wider"
+                            className="w-40 mx-auto block bg-primary hover:bg-teal-500 text-white font-bold py-3 rounded-md transition-colors uppercase tracking-wider"
                         >
                             Register
                         </button>

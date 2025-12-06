@@ -5,7 +5,7 @@ const asterisk = "/assets/asterisk.png";
 const ContactSection = () => {
     return (
         <section className="relative py-24 font-sans bg-[#0B1A2F]">
-            {/* Background Image with Overlay */}
+            {/* Background image */}
             <div className="absolute inset-0 z-0">
                 <img
                     src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80"
@@ -18,9 +18,9 @@ const ContactSection = () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-                    {/* Left Column: Content */}
+                    {/* Contact information */}
                     <div className="relative">
-                        {/* Green Circle Loader Decoration */}
+                        {/* Decorative loader */}
                         <div className="absolute -top-10 -left-10 w-12 h-12 border-t-4 border-l-4 border-[#10b981] rounded-full opacity-80" style={{ transform: 'rotate(-45deg)' }}></div>
 
                         <span className="text-[#ff5722] font-semibold tracking-wide text-lg block mb-2">Get In Touch</span>
@@ -34,15 +34,15 @@ const ContactSection = () => {
                             to guide you.
                         </p>
 
-                        {/* White Asterisk Decoration */}
+                        {/* Decorative element */}
                         <div className="mt-8">
                             <img src={asterisk} alt="" className="w-12 h-12 opacity-80 filter invert brightness-0 invert-100" style={{ filter: 'brightness(0) invert(1)' }} />
                         </div>
                     </div>
 
-                    {/* Right Column: Key Form */}
+                    {/* Contact form */}
                     <div className="relative">
-                        {/* Top Right Wavy Line Decoration */}
+                        {/* Decorative wave */}
                         <div className="absolute -top-20 -right-10 w-64 h-32 pointer-events-none hidden lg:block">
                             <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 50 Q 50 10 100 50 T 190 50" stroke="white" strokeWidth="1" fill="none" />
@@ -73,7 +73,7 @@ const ContactSection = () => {
                             </div>
 
                             <div className="flex justify-end items-center relative">
-                                {/* Bottom Right Wavy Decoration */}
+                                {/* Decorative wave */}
                                 <div className="absolute right-40 bottom-2 w-16 opacity-50 hidden sm:block">
                                     <svg width="60" height="20" viewBox="0 0 60 20" fill="none">
                                         <path d="M0 10 Q 5 0 10 10 T 20 10 T 30 10 T 40 10 T 50 10 T 60 10" stroke="white" strokeWidth="1" />

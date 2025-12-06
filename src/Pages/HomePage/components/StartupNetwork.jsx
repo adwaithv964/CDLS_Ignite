@@ -2,16 +2,16 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 const mashLogo = "/assets/mash_logo_v2.png";
 const noteLogo = "/assets/note_logo_v2.png";
-const founderMash = "/assets/founder_mash_v2.png";
-const founderNote = "/assets/founder_note_v2.png";
+const founderMash = "/assets/image_5.png";
+const founderNote = "/assets/image_4.png";
 const globe = "/assets/globe.png";
-const asterisk = "/assets/asterisk.png";
+const starGreen = "/assets/star_green.png";
 const contour = "/assets/contour.png";
 
 const StartupNetwork = () => {
     return (
         <section className="py-24 bg-white relative overflow-hidden font-sans">
-            {/* Decorative Elements */}
+            {/* Background decorations */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <img
                     src={globe}
@@ -19,10 +19,9 @@ const StartupNetwork = () => {
                     className="absolute top-5 left-5 w-32 h-32 opacity-20 rotate-12"
                 />
                 <img
-                    src={asterisk}
+                    src={starGreen}
                     alt="Decoration"
-                    className="absolute top-10 right-10 w-16 h-16 text-[#2DD4BF]"
-                    style={{ filter: 'invert(59%) sepia(21%) saturate(1115%) hue-rotate(124deg) brightness(98%) contrast(92%)' }}
+                    className="absolute top-10 right-10 w-16 h-16"
                 />
             </div>
 
@@ -39,9 +38,9 @@ const StartupNetwork = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Card 1: Mash Magic */}
+                    {/* Startup card: Mash Magic */}
                     <div className="bg-[#0b132b] rounded-3xl relative overflow-hidden h-[400px] flex">
-                        {/* Background contour */}
+                        {/* Contour background */}
                         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `url(${contour})`, backgroundSize: 'cover' }}></div>
 
                         <div className="flex-1 p-8 md:p-10 flex flex-col justify-center z-10">
@@ -65,15 +64,14 @@ const StartupNetwork = () => {
                             <img
                                 src={founderMash}
                                 alt="Founder"
-                                className="absolute bottom-0 right-0 w-full h-[90%] object-cover object-bottom"
-                                style={{ maskImage: 'linear-gradient(to right, transparent, black 10%)' }} // Attempt to blend edge if needed, but solid color BG should blend
+                                className="absolute bottom-0 right-0 w-full h-full object-contain object-bottom"
                             />
                         </div>
                     </div>
 
-                    {/* Card 2: Note AI */}
+                    {/* Startup card: Note AI */}
                     <div className="bg-[#2DD4BF] rounded-3xl relative overflow-hidden h-[400px] flex">
-                        {/* Background contour */}
+                        {/* Contour background */}
                         <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${contour})`, backgroundSize: 'cover' }}></div>
 
                         <div className="flex-1 p-8 md:p-10 flex flex-col justify-center z-10">
@@ -98,7 +96,7 @@ const StartupNetwork = () => {
                             <img
                                 src={founderNote}
                                 alt="Founder"
-                                className="absolute bottom-0 right-0 w-full h-[90%] object-cover object-bottom"
+                                className="absolute bottom-0 right-0 w-full h-full object-contain object-bottom"
                             />
                         </div>
                     </div>

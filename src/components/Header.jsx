@@ -63,8 +63,9 @@ const Header = () => {
 
                         {/* Action Buttons */}
                         <div className="hidden md:flex items-center space-x-6">
-                            <Link to="/login" className="bg-[#00D2AA] hover:bg-teal-500 text-white px-6 py-2 rounded-full font-medium flex items-center text-sm shadow-md transition-all">
-                                Login <ArrowRight size={16} className="ml-1" />
+                            <Link to="/login" className="group relative bg-[#00D2AA] hover:bg-teal-500 text-white px-8 py-2 rounded-full font-medium flex items-center justify-center text-sm shadow-md transition-all">
+                                <ArrowRight size={16} className="absolute left-4 transition-all duration-300 ease-in-out group-hover:left-[calc(100%-20px)] group-active:left-[calc(100%-20px)]" />
+                                <span>Login</span>
                             </Link>
                             <Link to="/register" className="text-[#F15A29] font-bold text-sm hover:underline">
                                 Register

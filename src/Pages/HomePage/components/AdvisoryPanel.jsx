@@ -31,9 +31,9 @@ const AdvisoryPanel = () => {
 
     return (
         <section className="bg-white relative font-sans pt-20 pb-20">
-            {/* Top 60% Green Background */}
+            {/* Split background */}
             <div className="absolute top-0 left-0 w-full h-[60%] bg-[#0f766e] overflow-hidden">
-                {/* Wavy Background Pattern (SVG) */}
+                {/* Decorative wave pattern */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
                     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                         <defs>
@@ -61,7 +61,7 @@ const AdvisoryPanel = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {advisors.map((advisor, index) => (
                         <div key={index} className="group relative">
-                            {/* Image Container */}
+                            {/* Advisor image */}
                             <div className="relative overflow-hidden h-80 bg-gray-200">
                                 <img
                                     src={advisor.image}
@@ -70,9 +70,9 @@ const AdvisoryPanel = () => {
                                 />
                             </div>
 
-                            {/* Content Container */}
+                            {/* Advisor details */}
                             <div className="bg-[#0f172a] p-6 text-center relative pt-10">
-                                {/* Floating Share Button */}
+                                {/* Social share action */}
                                 <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
                                     <button className="bg-[#ff5722] hover:bg-[#ff3d00] text-white p-3 rounded-full shadow-lg transition-colors">
                                         <Share2 size={18} fill="currentColor" />

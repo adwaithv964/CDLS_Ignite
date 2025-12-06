@@ -119,9 +119,9 @@ const Members = () => {
         <div className="font-sans text-gray-800 bg-gray-50 min-h-screen flex flex-col">
             <Header />
             <main className="flex-grow w-full">
-                {/* Stats Section with Doodle Background Placeholder */}
+                {/* Statistics section */}
                 <div className="bg-gray-100 py-16 px-4 relative overflow-hidden">
-                    {/* Decorative background elements would go here */}
+                    {/* Background elements */}
                     <div className="container mx-auto max-w-6xl">
                         <div className="text-center mb-12">
                             <p className="text-[#1B2A41] text-lg max-w-3xl mx-auto leading-relaxed">
@@ -154,7 +154,7 @@ const Members = () => {
                     </div>
                 </div>
 
-                {/* Faces of CDLS Section */}
+                {/* Learner members section */}
                 {activeTab === 'learners' && (
                     <div className="bg-[#FFFBF0] py-16 px-4 animate-fade-in">
                         <div className="container mx-auto max-w-6xl">
@@ -173,7 +173,7 @@ const Members = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {members.map((member) => (
                                     <div key={member.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden group">
-                                        {/* Image Container */}
+                                        {/* Profile image */}
                                         <div className="relative aspect-[4/5] overflow-hidden">
                                             <img
                                                 src={member.image}
@@ -182,10 +182,10 @@ const Members = () => {
                                             />
                                         </div>
 
-                                        {/* Content */}
+                                        {/* Member details */}
                                         <div className="relative p-6 pt-8">
-                                            {/* Floating Button */}
-                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-600 transition-colors z-20 flex items-center gap-1">
+                                            {/* Action button */}
+                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-500 transition-colors z-20 flex items-center gap-1">
                                                 View
                                             </button>
 
@@ -199,7 +199,7 @@ const Members = () => {
                     </div>
                 )}
 
-                {/* Gig Workers Section */}
+                {/* Gig workers section */}
                 {activeTab === 'gig_workers' && (
                     <div className="bg-[#FFFBF0] py-16 px-4 animate-fade-in">
                         <div className="container mx-auto max-w-6xl">
@@ -218,7 +218,7 @@ const Members = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {gigWorkers.map((worker) => (
                                     <div key={worker.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden group">
-                                        {/* Image Container */}
+                                        {/* Profile image */}
                                         <div className="relative aspect-[4/5] overflow-hidden">
                                             <img
                                                 src={worker.image}
@@ -227,10 +227,10 @@ const Members = () => {
                                             />
                                         </div>
 
-                                        {/* Content */}
+                                        {/* Member details */}
                                         <div className="relative p-6 pt-8">
-                                            {/* Floating Button */}
-                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-600 transition-colors z-20 flex items-center gap-1">
+                                            {/* Action button */}
+                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-500 transition-colors z-20 flex items-center gap-1">
                                                 View
                                             </button>
 
@@ -244,7 +244,7 @@ const Members = () => {
                     </div>
                 )}
 
-                {/* Mentors Section */}
+                {/* Mentors section */}
                 {activeTab === 'mentors' && (
                     <div className="bg-[#FFFBF0] py-16 px-4 animate-fade-in">
                         <div className="container mx-auto max-w-6xl">
@@ -263,7 +263,7 @@ const Members = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {mentors.map((mentor) => (
                                     <div key={mentor.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden group">
-                                        {/* Image Container */}
+                                        {/* Profile image */}
                                         <div className="relative aspect-[4/5] overflow-hidden">
                                             <img
                                                 src={mentor.image}
@@ -272,10 +272,10 @@ const Members = () => {
                                             />
                                         </div>
 
-                                        {/* Content */}
+                                        {/* Member details */}
                                         <div className="relative p-6 pt-8">
-                                            {/* Floating Button */}
-                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-600 transition-colors z-20 flex items-center gap-1">
+                                            {/* Action button */}
+                                            <button className="absolute -top-5 right-4 bg-[#00A99D] text-white px-6 py-2 text-sm font-medium shadow-lg hover:bg-teal-500 transition-colors z-20 flex items-center gap-1">
                                                 View
                                             </button>
 
