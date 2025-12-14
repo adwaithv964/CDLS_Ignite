@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                     {/* Column 1: Address */}
-                    <div className="flex items-start lg:pr-8 lg:border-r border-gray-800">
+                    <div className="flex items-start lg:pr-8 border-b lg:border-b-0 lg:border-r border-gray-800 pb-8 lg:pb-0">
                         <div className="bg-gray-800 p-3 rounded-full mr-4 flex-shrink-0">
                             <MapPin className="text-white" size={24} />
                         </div>
@@ -24,7 +24,7 @@ const Footer = () => {
                     </div>
 
                     {/* Column 2: Working Time */}
-                    <div className="flex items-start lg:px-8 lg:border-r border-gray-800">
+                    <div className="flex items-start lg:px-8 border-b lg:border-b-0 lg:border-r border-gray-800 pb-8 lg:pb-0">
                         <div className="bg-transparent mr-4 flex-shrink-0">
                             <Laptop className="text-white" size={40} />
                         </div>

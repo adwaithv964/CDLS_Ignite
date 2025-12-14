@@ -39,11 +39,11 @@ const StartupNetwork = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Startup card: Mash Magic */}
-                    <div className="bg-[#0b132b] rounded-3xl relative overflow-hidden h-[400px] flex">
+                    <div className="bg-[#0b132b] rounded-3xl relative overflow-hidden min-h-[400px] md:h-[400px] flex flex-col md:flex-row">
                         {/* Contour background */}
                         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `url(${contour})`, backgroundSize: 'cover' }}></div>
 
-                        <div className="flex-1 p-8 md:p-10 flex flex-col justify-center z-10">
+                        <div className="w-full md:flex-1 p-8 md:p-10 flex flex-col justify-center z-10 order-2 md:order-1">
                             <div className="bg-white rounded-lg p-2 w-32 mb-6">
                                 <img src={mashLogo} alt="Mash Magic" className="w-full h-auto object-contain" />
                             </div>
@@ -60,7 +60,7 @@ const StartupNetwork = () => {
                             </a>
                         </div>
 
-                        <div className="w-[45%] h-full relative">
+                        <div className="w-full h-64 md:w-[45%] md:h-full relative order-1 md:order-2">
                             <img
                                 src={founderMash}
                                 alt="Founder"
@@ -70,11 +70,11 @@ const StartupNetwork = () => {
                     </div>
 
                     {/* Startup card: Note AI */}
-                    <div className="bg-[#2DD4BF] rounded-3xl relative overflow-hidden h-[400px] flex">
+                    <div className="bg-[#2DD4BF] rounded-3xl relative overflow-hidden min-h-[400px] md:h-[400px] flex flex-col md:flex-row">
                         {/* Contour background */}
                         <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${contour})`, backgroundSize: 'cover' }}></div>
 
-                        <div className="flex-1 p-8 md:p-10 flex flex-col justify-center z-10">
+                        <div className="w-full md:flex-1 p-8 md:p-10 flex flex-col justify-center z-10 order-2 md:order-1">
                             <div className="w-16 h-16 mb-6">
                                 <img src={noteLogo} alt="Note AI" className="w-full h-full object-contain drop-shadow-lg rounded-xl" />
                             </div>
@@ -92,7 +92,7 @@ const StartupNetwork = () => {
                             </a>
                         </div>
 
-                        <div className="w-[45%] h-full relative">
+                        <div className="w-full h-64 md:w-[45%] md:h-full relative order-1 md:order-2">
                             <img
                                 src={founderNote}
                                 alt="Founder"

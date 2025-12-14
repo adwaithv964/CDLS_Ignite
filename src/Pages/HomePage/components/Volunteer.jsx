@@ -46,7 +46,7 @@ const Volunteer = () => {
                             <span className="text-[#00D2AA] text-xs lg:text-sm font-bold tracking-[0.2em] uppercase">TOGETHER WE GROW</span>
                         </div>
 
-                        <h2 className="text-4xl lg:text-6xl font-extrabold text-[#1B2A41] mb-10 leading-[1.1] tracking-tight">
+                        <h2 className="text-3xl lg:text-6xl font-extrabold text-[#1B2A41] mb-10 leading-[1.1] tracking-tight">
                             Volunteer & Mentorship<br />
                             Opportunities At <span className="text-[#F15A29]">CDLS</span>
                         </h2>

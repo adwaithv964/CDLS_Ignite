@@ -11,7 +11,7 @@ const CoWorks = () => {
                 <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
 
                     {/* Visual showcase section */}
-                    <div className="w-full lg:w-1/2 relative min-h-[500px]">
+                    <div className="w-full lg:w-1/2 relative min-h-[400px] md:min-h-[500px] order-2 lg:order-1">
 
                         {/* Decorative elements */}
                         <div className="absolute -top-10 -left-10 z-0">
@@ -61,7 +61,7 @@ const CoWorks = () => {
                     </div>
 
                     {/* Info section */}
-                    <div className="w-full lg:w-1/2">
+                    <div className="w-full lg:w-1/2 order-1 lg:order-2">
                         <div className="flex items-center space-x-2 mb-4">
                             <Gem size={16} className="text-[#F15A29]" />
                             <span className="text-[#F15A29] text-xs font-bold uppercase tracking-widest">ABOUT US</span>
@@ -69,7 +69,7 @@ const CoWorks = () => {
 
                         <h2 className="text-3xl lg:text-4xl font-bold text-[#1B2A41] mb-8 leading-tight">
                             Experience CDLS As <span className="text-[#F15A29]">Co-Works</span>:<br />
-                            Where Ideas Meet Collaboration
+                            Where Ideas <br className="md:hidden" /> Meet Collaboration
                         </h2>
 
                         <div className="flex flex-wrap gap-6 mb-8 text-sm font-bold text-[#1B2A41]">

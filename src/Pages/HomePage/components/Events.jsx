@@ -32,8 +32,8 @@ const Events = () => {
                             <span className="font-semibold tracking-wider text-sm uppercase">Book Your Slot</span>
                         </div>
 
-                        <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0f172a] mb-8 leading-tight">
-                            Community Led <span className="text-[#ff5722]">Events</span> At <br />
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0f172a] mb-8 leading-tight">
+                            Community Led <br className="hidden md:block" /> <span className="text-[#ff5722]">Events</span> At <br />
                             CDLS
                         </h2>
 

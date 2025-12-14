@@ -11,7 +11,7 @@ const Header = () => {
     };
 
     return (
-        <div className="flex flex-col w-full z-50">
+        <div className="flex flex-col w-full z-50 fixed md:relative">
             {/* Top Bar */}
             <div className="bg-[#1B2A41] text-white text-xs py-2">
                 <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
@@ -44,10 +44,10 @@ const Header = () => {
             {/* Navbar */}
             <header className="bg-white shadow-sm sticky top-0">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
+                    <div className="flex justify-between items-center h-16 md:h-20">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
-                            <Link to="/" className="text-2xl font-bold text-[#1B2A41] leading-tight text-center md:text-left">
+                            <Link to="/" className="text-xl md:text-2xl font-bold text-[#1B2A41] leading-tight text-left">
                                 Community Digital<br />Learning Space
                             </Link>
                         </div>
