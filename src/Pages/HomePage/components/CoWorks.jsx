@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, ChevronRight, Gem } from 'lucide-react';
 import InterestedIndividualForm from '../../Members/components/InterestedIndividualForm';
+import { Link } from 'react-router-dom';
 
 const CoWorks = () => {
     const [showForm, setShowForm] = React.useState(false);
@@ -11,7 +12,7 @@ const CoWorks = () => {
                 <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
 
                     {/* Visual showcase section */}
-                    <div className="w-full lg:w-1/2 relative min-h-[400px] md:min-h-[500px] order-2 lg:order-1">
+                    <div className="w-full lg:w-1/2 relative min-h-[500px] md:min-h-[600px] order-2 lg:order-1">
 
                         {/* Decorative elements */}
                         <div className="absolute -top-10 -left-10 z-0">
@@ -22,9 +23,9 @@ const CoWorks = () => {
                         </div>
 
                         {/* Primary image */}
-                        <div className="absolute top-0 left-0 w-64 h-96 bg-gray-200 z-10 overflow-hidden shadow-lg">
+                        <div className="absolute top-0 left-0 w-80 h-[450px] bg-gray-200 z-10 overflow-hidden shadow-lg">
                             <img
-                                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80"
+                                src="/assets/co-works_img_1.JPG"
                                 alt="Co-working collaborative space"
                                 className="w-full h-full object-cover"
                             />
@@ -50,9 +51,9 @@ const CoWorks = () => {
 
 
                         {/* Secondary image */}
-                        <div className="absolute bottom-0 right-0 w-72 h-64 bg-gray-200 z-10 overflow-hidden shadow-lg border-8 border-white">
+                        <div className="absolute bottom-0 right-0 md:-right-10 w-96 h-80 bg-gray-200 z-10 overflow-hidden shadow-lg border-8 border-white">
                             <img
-                                src="https://m.media-amazon.com/images/I/51+6B4s2t6L._SY350_.jpg"
+                                src="/assets/co-works_img_2.jpeg"
                                 alt="Woman working in office"
                                 className="w-full h-full object-cover"
                             />
@@ -87,14 +88,12 @@ const CoWorks = () => {
                             businesses a collaborative hub for ideas, projects, and growth.
                         </p>
 
-                        <a
-                            href="https://cdls.in"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <Link
+                            to="/cdls"
                             className="bg-[#22C59E] hover:bg-teal-500 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30 w-fit"
                         >
                             Explore more <ArrowRight size={18} className="ml-2" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

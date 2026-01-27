@@ -4,10 +4,13 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import api from '../../api/axios';
 
+import RegisterEventModal from './components/RegisterEventModal';
+
 const EventsPage = () => {
     const [activeTab, setActiveTab] = useState('upcoming');
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     React.useEffect(() => {
         const fetchEvents = async () => {
@@ -40,8 +43,26 @@ const EventsPage = () => {
         image: event.image
     });
 
-    const upcomingSessions = events.filter(e => e.status !== 'Closed').map(mapEvent);
-    const earlierSessions = events.filter(e => e.status === 'Closed').map(mapEvent);
+    // Helper to check if a date is today or in the future
+    const isTodayOrFuture = (dateStr) => {
+        if (!dateStr) return false;
+        // Check if dateStr is YYYY-MM-DD format
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const eventDate = new Date(year, month - 1, day); // Local time
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Reset time to start of day
+            return eventDate >= today;
+        }
+        // Fallback for other formats or let native parsing handle it (less reliable for timezone)
+        const eventDate = new Date(dateStr);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return eventDate >= today;
+    };
+
+    const upcomingSessions = events.filter(e => isTodayOrFuture(e.date)).map(mapEvent);
+    const earlierSessions = events.filter(e => !isTodayOrFuture(e.date)).map(mapEvent);
 
 
     const renderCard = (session, isEarlier = false) => (
@@ -68,8 +89,16 @@ const EventsPage = () => {
                     {session.title}
                 </h3>
                 <div className="flex items-center text-[10px] text-gray-500 space-x-4 mb-4">
-                    <div className="flex items-center"><Clock size={12} className="mr-1" /> {session.date}</div>
-                    <div className="flex items-center"><Clock size={12} className="mr-1" /> {session.time}</div>
+                    <div className="flex items-center"><Clock size={12} className="mr-1" /> {
+                        // Attempt to format date if it matches YYYY-MM-DD, otherwise show as is
+                        !isNaN(Date.parse(session.date)) ? new Date(session.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : session.date
+                    }</div>
+                    <div className="flex items-center"><Clock size={12} className="mr-1" /> {
+                        // Format HH:mm to 12h AM/PM if pattern matches
+                        /^([01]\d|2[0-3]):([0-5]\d)$/.test(session.time)
+                            ? new Date(`2000-01-01T${session.time}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                            : session.time
+                    }</div>
                     <div className="flex items-center"><MapPin size={12} className="mr-1" /> {session.location}</div>
                 </div>
                 <hr className="border-gray-100 mb-4" />
@@ -92,12 +121,54 @@ const EventsPage = () => {
                 </div>
             ) : (
                 <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-[#1B2A41]">{session.status}</span>
-                    {session.isOpen ? (
-                        <button className="text-gray-400 hover:text-[#1B2A41]">View Details</button>
-                    ) : (
-                        <button className="text-gray-400 hover:text-[#1B2A41] flex items-center"><span className="w-2 h-2 bg-gray-400 rounded-full mr-1"></span> Notify Next Time</button>
-                    )}
+                    {/* Dynamic Status: Check if time has passed for today */}
+                    {(() => {
+                        let isTimePassed = false;
+                        if (session.date && session.time) {
+                            // Check if date is today
+                            const dateStr = session.date;
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                                const [year, month, day] = dateStr.split('-').map(Number);
+                                const eventDate = new Date(year, month - 1, day);
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+
+                                if (eventDate.getTime() === today.getTime()) {
+                                    // It is today, check time
+                                    const now = new Date();
+                                    // Construct event time today
+                                    if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(session.time)) {
+                                        const [hours, minutes] = session.time.split(':').map(Number);
+                                        const eventTime = new Date();
+                                        eventTime.setHours(hours, minutes, 0, 0);
+                                        if (now > eventTime) {
+                                            isTimePassed = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Display 'Closed' if status is Closed OR if time has passed
+                        const displayStatus = (session.status === 'Closed' || isTimePassed) ? 'Closed' : 'Open';
+                        const showRegister = (session.isOpen && session.status !== 'Closed' && !isTimePassed);
+
+                        return (
+                            <>
+                                <span className="font-bold text-[#1B2A41]">{displayStatus}</span>
+                                {showRegister ? (
+                                    <button
+                                        onClick={() => setSelectedEvent(session)}
+                                        className="bg-[#1B2A41] hover:bg-black text-white px-4 py-2 rounded transition-colors"
+                                    >
+                                        Register Now
+                                    </button>
+                                ) : (
+                                    <button className="text-gray-400 hover:text-[#1B2A41] flex items-center"><span className="w-2 h-2 bg-gray-400 rounded-full mr-1"></span> Notify Next Time</button>
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
             )}
         </div>
@@ -244,7 +315,17 @@ const EventsPage = () => {
             </main>
 
             <Footer />
-        </div>
+
+            {
+                selectedEvent && (
+                    <RegisterEventModal
+                        event={selectedEvent}
+                        onClose={() => setSelectedEvent(null)}
+                        onSuccess={() => {/* Maybe refresh events? */ }}
+                    />
+                )
+            }
+        </div >
     );
 };
 

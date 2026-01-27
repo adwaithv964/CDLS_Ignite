@@ -20,7 +20,7 @@ import SubscribersManager from './Pages/Admin/SubscribersManager';
 
 function App() {
     return (
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ScrollToTop />
             <div className="min-h-screen bg-white font-sans">
                 <Routes>

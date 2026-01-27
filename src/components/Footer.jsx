@@ -94,6 +94,8 @@ const NewsletterForm = () => {
                 className="w-full bg-[#f3f4f6] text-gray-800 px-4 py-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#10b981]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onInvalid={(e) => e.target.setCustomValidity('Invalid email, Ente a valid email')}
+                onInput={(e) => e.target.setCustomValidity('')}
                 required
             />
             <button

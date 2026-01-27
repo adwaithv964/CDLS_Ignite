@@ -7,25 +7,25 @@ const AdvisoryPanel = () => {
             name: "JAISON N D",
             role: "Secretary - Panangad",
             location: "Grama Panchayat",
-            image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            name: "MEHAR MOOSA",
-            role: "Co-Founder",
-            location: "TinkerSpace",
-            image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            image: "/assets/guidence_img_1.png"
         },
         {
             name: "FAWAS SHAMEEM",
             role: "Secretary - Thamarassery",
             location: "Grama Panchayat",
-            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            image: "/assets/guidence_img_2.jpeg"
         },
         {
-            name: "JAMSHEELA",
-            role: "Manager - CDLS",
-            location: "",
-            image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            name: "MEHAR MOOSA",
+            role: "Co-Founder",
+            location: "TinkerSpace",
+            image: "/assets/guidence_img_3.jpg"
+        },
+        {
+            name: "RONY K ROY",
+            role: "Senior Tech Fellow",
+            location: "KSUM",
+            image: "/assets/guidence_img_4.jpg"
         }
     ];
 
@@ -62,11 +62,11 @@ const AdvisoryPanel = () => {
                     {advisors.map((advisor, index) => (
                         <div key={index} className="group relative">
                             {/* Advisor image */}
-                            <div className="relative overflow-hidden h-80 bg-gray-200">
+                            <div className="relative overflow-hidden h-80 bg-white">
                                 <img
                                     src={advisor.image}
                                     alt={advisor.name}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                                 />
                             </div>
 

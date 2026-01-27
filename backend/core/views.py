@@ -40,6 +40,26 @@ from rest_framework import status
 from cdls_ignite_backend.mongo_db import get_db
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+from bson import ObjectId
+
+@csrf_exempt
+@api_view(['DELETE'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def contact_delete_mongo(request, object_id):
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        result = db.inquiries.delete_one({'_id': ObjectId(object_id)})
+        if result.deleted_count == 1:
+            return Response({"message": "Deleted successfully"}, status=status.HTTP_200_OK)
+        return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@csrf_exempt
 
 @csrf_exempt
 @api_view(['POST'])
@@ -65,6 +85,7 @@ def contact_create_mongo(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny]) # Changing to AllowAny for dev, should be IsAdmin for prod
 def contact_list_mongo(request):
     db = get_db()
@@ -105,6 +126,7 @@ def interest_create_mongo(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def interest_list_mongo(request):
     db = get_db()
@@ -151,6 +173,7 @@ def subscriber_create_mongo(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def subscriber_list_mongo(request):
     db = get_db()
@@ -162,5 +185,39 @@ def subscriber_list_mongo(request):
         for sub in subscribers:
             sub['_id'] = str(sub['_id'])
         return Response(subscribers, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@csrf_exempt
+@api_view(['DELETE'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def interest_delete_mongo(request, object_id):
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        result = db.interests.delete_one({'_id': ObjectId(object_id)})
+        if result.deleted_count == 1:
+            return Response({"message": "Deleted successfully"}, status=status.HTTP_200_OK)
+        return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@csrf_exempt
+@api_view(['DELETE'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def subscriber_delete_mongo(request, object_id):
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        result = db.subscribers.delete_one({'_id': ObjectId(object_id)})
+        if result.deleted_count == 1:
+            return Response({"message": "Deleted successfully"}, status=status.HTTP_200_OK)
+        return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

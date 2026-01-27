@@ -26,6 +26,17 @@ const InterestsManager = () => {
         fetchInterests();
     }, [category]);
 
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this record?')) return;
+        try {
+            await api.delete(`/core/interest/delete/${id}/`);
+            fetchInterests(); // Refresh data
+        } catch (error) {
+            console.error("Failed to delete:", error);
+            alert("Failed to delete record");
+        }
+    };
+
     const columns = [
         { label: 'Name', key: 'name' },
         { label: 'Email', key: 'email' },
@@ -56,6 +67,7 @@ const InterestsManager = () => {
                 columns={columns}
                 data={data}
                 isLoading={loading}
+                onDelete={handleDelete}
             />
         </div>
     );

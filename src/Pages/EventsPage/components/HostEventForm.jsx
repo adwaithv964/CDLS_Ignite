@@ -93,6 +93,8 @@ const HostEventForm = ({ onClose }) => {
                         className="w-full bg-white text-gray-800 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#00D2AA]"
                         value={formData.email}
                         onChange={handleChange}
+                        onInvalid={(e) => e.target.setCustomValidity('Invalid email, Enter a valid email')}
+                        onInput={(e) => e.target.setCustomValidity('')}
                         required
                     />
                     <input

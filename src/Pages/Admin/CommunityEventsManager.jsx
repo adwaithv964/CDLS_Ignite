@@ -22,6 +22,17 @@ const CommunityEventsManager = () => {
         fetchData();
     }, []);
 
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this event request?')) return;
+        try {
+            await api.delete(`/events/host/delete/${id}/`);
+            fetchData();
+        } catch (error) {
+            console.error("Failed to delete:", error);
+            alert("Failed to delete record");
+        }
+    };
+
     const columns = [
         { label: 'Event Title', key: 'event_title' },
         { label: 'Host Name', key: 'name' },
@@ -38,6 +49,7 @@ const CommunityEventsManager = () => {
                 columns={columns}
                 data={data}
                 isLoading={loading}
+                onDelete={handleDelete}
             />
         </div>
     );

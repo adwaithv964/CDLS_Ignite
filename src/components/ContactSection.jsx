@@ -96,6 +96,8 @@ const ContactSection = () => {
                                     className="w-full bg-[#f1f5f9] text-gray-800 rounded-full px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#10b981] placeholder-gray-500"
                                     value={formData.email}
                                     onChange={handleChange}
+                                    onInvalid={(e) => e.target.setCustomValidity('Invalid email, Enter a valid email')}
+                                    onInput={(e) => e.target.setCustomValidity('')}
                                     required
                                 />
                             </div>

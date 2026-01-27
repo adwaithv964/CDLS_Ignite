@@ -41,6 +41,8 @@ const AdminLogin = () => {
                             className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            onInvalid={(e) => e.target.setCustomValidity('Invalid email, Enter a valid email')}
+                            onInput={(e) => e.target.setCustomValidity('')}
                             required
                         />
                     </div>

@@ -1,62 +1,83 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Clock, MapPin, Bell, Hexagon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import api from '../../../api/axios';
 
 const SkillDevelopment = () => {
+    const [sessions, setSessions] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    /**
-     * Session data for the skill development programs.
-     */
-    const sessions = [
-        {
-            id: 1,
-            tag: "Beginners",
-            tagColor: "bg-[#F15A29]",
-            registrations: 30,
-            title: "Robotics For Daily Life And Innovation",
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            status: "Open",
-            isOpen: true,
-            imageColor: "bg-blue-100",
-            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
-        },
-        {
-            id: 2,
-            tag: "Advanced",
-            tagColor: "bg-[#F43F5E]",
-            registrations: 35,
-            title: "Session On Digital Marketing",
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            status: "Closed",
-            isOpen: false,
-            imageColor: "bg-sky-100",
-            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
-        },
-        {
-            id: 3,
-            tag: "Hands-on",
-            tagColor: "bg-[#F15A29]",
-            registrations: 5,
-            title: "Web Developement For Beginners",
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            status: "Open",
-            isOpen: true,
-            imageColor: "bg-yellow-100",
-            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await api.get('/events/');
+                const events = response.data;
+
+                // Helper to check if a date is today or in the future
+                const isTodayOrFuture = (dateStr) => {
+                    if (!dateStr) return false;
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                        const [year, month, day] = dateStr.split('-').map(Number);
+                        const eventDate = new Date(year, month - 1, day);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        return eventDate >= today;
+                    }
+                    const eventDate = new Date(dateStr);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return eventDate >= today;
+                };
+
+                const mappedSessions = events
+                    .filter(e => isTodayOrFuture(e.date))
+                    .slice(0, 3) // Show only first 3 upcoming events
+                    .map(event => ({
+                        id: event.id,
+                        tag: event.type,
+                        tagColor: event.type_color || "bg-blue-500",
+                        registrations: event.registrations,
+                        title: event.title,
+                        date: event.date, // You might want to format this
+                        time: event.time,
+                        location: event.location,
+                        author: event.author,
+                        dept: event.dept,
+                        status: event.status,
+                        isOpen: event.is_open,
+                        imageColor: event.image_color || "bg-gray-100",
+                        image: event.image
+                    }));
+
+                setSessions(mappedSessions);
+            } catch (error) {
+                console.error("Failed to fetch events for home page", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
+
+    // Helper for date formatting
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        if (!isNaN(Date.parse(dateStr))) {
+            return new Date(dateStr).toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
         }
-    ];
+        return dateStr;
+    };
+
+    // Helper for time formatting
+    const formatTime = (timeStr) => {
+        if (!timeStr) return '';
+        if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(timeStr)) {
+            return new Date(`2000-01-01T${timeStr}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        }
+        return timeStr;
+    };
+
 
     return (
         <section className="py-20 bg-gray-50 relative overflow-hidden">
@@ -102,66 +123,72 @@ const SkillDevelopment = () => {
 
                 {/* Session Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {sessions.map((session) => (
-                        <div key={session.id} className="bg-white p-5 rounded-sm shadow-sm hover:shadow-lg transition-shadow border border-gray-100 flex flex-col h-full">
+                    {loading ? (
+                        <div className="col-span-full text-center py-10 text-gray-400">Loading events...</div>
+                    ) : sessions.length > 0 ? (
+                        sessions.map((session) => (
+                            <div key={session.id} className="bg-white p-5 rounded-sm shadow-sm hover:shadow-lg transition-shadow border border-gray-100 flex flex-col h-full">
 
-                            {/* Card Image Section */}
-                            <div className={`h-48 rounded-sm mb-6 relative overflow-hidden ${session.imageColor} flex items-center justify-center`}>
-                                {session.image ? (
-                                    <img src={session.image} alt={session.title} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="text-gray-400 font-bold opacity-30 text-xl uppercase tracking-widest">Image</div>
-                                )}
-                                <div className="absolute top-4 left-4">
-                                    <span className={`${session.tagColor} text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm`}>
-                                        {session.tag}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Card Content */}
-                            <div className="flex-grow">
-                                <div className="mb-3">
-                                    <span className="text-[10px] font-bold text-yellow-500 bg-yellow-50 px-2 py-1 rounded">Registrations: {session.registrations}</span>
-                                </div>
-                                <h3 className="font-bold text-lg text-[#1B2A41] mb-6 min-h-[56px] leading-snug">
-                                    {session.title}
-                                </h3>
-
-                                <div className="flex items-center text-[10px] text-gray-500 space-x-4 mb-4 font-medium">
-                                    <div className="flex items-center"><Clock size={12} className="mr-1.5" /> {session.date}</div>
-                                    <div className="flex items-center"><Clock size={12} className="mr-1.5" /> {session.time}</div>
-                                    <div className="flex items-center"><MapPin size={12} className="mr-1.5" /> {session.location}</div>
-                                </div>
-
-                                <hr className="border-gray-100 mb-4" />
-
-                                <div className="flex items-start space-x-3 text-[10px] text-gray-500 mb-6">
-                                    <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
-                                        {/* Avatar Icon */}
-                                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-gray-400 translate-y-1"><path d="M24 24H0V22C0 18 4 15 12 15C20 15 24 18 24 22V24Z" /><circle cx="12" cy="7" r="5" /></svg>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-gray-700">By {session.author}</p>
-                                        <p className="text-gray-400 text-[9px]">{session.dept}</p>
+                                {/* Card Image Section */}
+                                <div className={`h-48 rounded-sm mb-6 relative overflow-hidden ${session.imageColor} flex items-center justify-center`}>
+                                    {session.image ? (
+                                        <img src={session.image} alt={session.title} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="text-gray-400 font-bold opacity-30 text-xl uppercase tracking-widest">Image</div>
+                                    )}
+                                    <div className="absolute top-4 left-4">
+                                        <span className={`${session.tagColor} text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm`}>
+                                            {session.tag}
+                                        </span>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Card Footer */}
-                            <div className="flex justify-between items-center text-xs mt-auto pt-2">
-                                <span className="font-bold text-[#1B2A41]">{session.status}</span>
-                                {session.isOpen ? (
-                                    <button className="text-gray-400 hover:text-[#1B2A41] font-medium transition-colors">View Details</button>
-                                ) : (
-                                    <button className="text-gray-400 hover:text-[#1B2A41] flex items-center font-medium transition-colors">
-                                        <Bell size={12} className="mr-1.5" /> Notify Next Time
-                                    </button>
-                                )}
-                            </div>
+                                {/* Card Content */}
+                                <div className="flex-grow">
+                                    <div className="mb-3">
+                                        <span className="text-[10px] font-bold text-yellow-500 bg-yellow-50 px-2 py-1 rounded">Registrations: {session.registrations}</span>
+                                    </div>
+                                    <h3 className="font-bold text-lg text-[#1B2A41] mb-6 min-h-[56px] leading-snug">
+                                        {session.title}
+                                    </h3>
 
-                        </div>
-                    ))}
+                                    <div className="flex items-center text-[10px] text-gray-500 space-x-4 mb-4 font-medium">
+                                        <div className="flex items-center"><Clock size={12} className="mr-1.5" /> {formatDate(session.date)}</div>
+                                        <div className="flex items-center"><Clock size={12} className="mr-1.5" /> {formatTime(session.time)}</div>
+                                        <div className="flex items-center"><MapPin size={12} className="mr-1.5" /> {session.location}</div>
+                                    </div>
+
+                                    <hr className="border-gray-100 mb-4" />
+
+                                    <div className="flex items-start space-x-3 text-[10px] text-gray-500 mb-6">
+                                        <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden text-center flex items-center justify-center font-bold text-gray-500">
+                                            {/* Avatar Icon */}
+                                            {session.author ? session.author.charAt(0) : '?'}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-700">By {session.author}</p>
+                                            <p className="text-gray-400 text-[9px]">{session.dept}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Card Footer */}
+                                <div className="flex justify-between items-center text-xs mt-auto pt-2">
+                                    <span className="font-bold text-[#1B2A41]">{session.status}</span>
+                                    {session.isOpen ? (
+                                        <Link to="/events" className="text-gray-400 hover:text-[#1B2A41] font-medium transition-colors">View Details</Link>
+                                    ) : (
+                                        <button className="text-gray-400 hover:text-[#1B2A41] flex items-center font-medium transition-colors">
+                                            <Bell size={12} className="mr-1.5" /> Notify Next Time
+                                        </button>
+                                    )}
+                                </div>
+
+                            </div>
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-10 text-gray-500">No upcoming events found.</div>
+                    )}
                 </div>
 
                 {/* Mobile Action Button */}

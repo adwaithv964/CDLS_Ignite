@@ -87,6 +87,8 @@ const Register = () => {
                                 className="w-full bg-gray-100 border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:bg-white transition-all"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                onInvalid={(e) => e.target.setCustomValidity('Invalid email, Enter a valid email')}
+                                onInput={(e) => e.target.setCustomValidity('')}
                                 required
                             />
                         </div>

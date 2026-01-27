@@ -22,6 +22,17 @@ const InquiriesManager = () => {
         fetchData();
     }, []);
 
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this inquiry?')) return;
+        try {
+            await api.delete(`/core/contact/delete/${id}/`);
+            fetchData();
+        } catch (error) {
+            console.error("Failed to delete:", error);
+            alert("Failed to delete record");
+        }
+    };
+
     const columns = [
         { label: 'Name', key: 'name' },
         { label: 'Email', key: 'email' },
@@ -36,6 +47,7 @@ const InquiriesManager = () => {
                 columns={columns}
                 data={data}
                 isLoading={loading}
+                onDelete={handleDelete}
             />
         </div>
     );

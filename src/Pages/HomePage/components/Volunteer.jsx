@@ -99,7 +99,7 @@ const Volunteer = () => {
                             {/* Main image container */}
                             <div className="relative z-10 w-full aspect-[4/5] bg-gray-200 overflow-hidden shadow-2xl rounded-sm">
                                 <img
-                                    src="/assets/image_3.jpg"
+                                    src="/assets/cdls_img_1.jpeg"
                                     alt="Students analyzing data together"
                                     className="w-full h-full object-cover"
                                 />

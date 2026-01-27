@@ -79,10 +79,12 @@ const Login = () => {
                         <label className="block text-xl font-serif text-gray-800 mb-2">Email</label>
                         <input
                             type="email"
-                            placeholder="E.g. johndoe@email.com"
+                            placeholder="E.g. example@email.com"
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-500 text-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            onInvalid={(e) => e.target.setCustomValidity('Invalid email, Enter a valid email')}
+                            onInput={(e) => e.target.setCustomValidity('')}
                             required
                         />
                     </div>

@@ -22,6 +22,17 @@ const SubscribersManager = () => {
         fetchData();
     }, []);
 
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this subscriber?')) return;
+        try {
+            await api.delete(`/core/subscribe/delete/${id}/`);
+            fetchData();
+        } catch (error) {
+            console.error("Failed to delete:", error);
+            alert("Failed to delete record");
+        }
+    };
+
     const columns = [
         { label: 'Email', key: 'email' },
         { label: 'Subscribed At', key: 'created_at', render: (row) => new Date(row.created_at).toLocaleDateString() },
@@ -34,6 +45,7 @@ const SubscribersManager = () => {
                 columns={columns}
                 data={data}
                 isLoading={loading}
+                onDelete={handleDelete}
             />
         </div>
     );

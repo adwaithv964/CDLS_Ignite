@@ -2,9 +2,9 @@ from django.urls import path
 from .views import (
     ContactCreateView, InterestCreateView, InterestListView, 
     ContactListView, SubscriberCreateView, SubscriberListView,
-    contact_create_mongo, contact_list_mongo,
-    interest_create_mongo, interest_list_mongo,
-    subscriber_create_mongo, subscriber_list_mongo
+    contact_create_mongo, contact_list_mongo, contact_delete_mongo,
+    interest_create_mongo, interest_list_mongo, interest_delete_mongo,
+    subscriber_create_mongo, subscriber_list_mongo, subscriber_delete_mongo
 )
 
 urlpatterns = [
@@ -20,4 +20,7 @@ urlpatterns = [
     path('subscribe/', subscriber_create_mongo, name='subscribe-create-mongo'),
     # path('subscribers/list/', SubscriberListView.as_view(), name='subscriber-list'),
     path('subscribers/list/', subscriber_list_mongo, name='subscriber-list-mongo'),
+    path('contact/delete/<str:object_id>/', contact_delete_mongo, name='contact-delete-mongo'),
+    path('interest/delete/<str:object_id>/', interest_delete_mongo, name='interest-delete-mongo'),
+    path('subscribe/delete/<str:object_id>/', subscriber_delete_mongo, name='subscriber-delete-mongo'),
 ]

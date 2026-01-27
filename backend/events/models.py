@@ -13,7 +13,7 @@ class Event(models.Model):
     status = models.CharField(max_length=20) # Open, Closed
     is_open = models.BooleanField(default=True)
     image_color = models.CharField(max_length=50, blank=True)
-    image = models.URLField(blank=True)
+    image = models.ImageField(upload_to='events/', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -34,3 +34,13 @@ class HostEventRequest(models.Model):
 
     def __str__(self):
         return f"Host Request: {self.event_title} by {self.name}"
+
+class EventRegistration(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations_list')
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.event.title}"

@@ -78,7 +78,7 @@ const DataTable = ({ columns, data, onEdit, onDelete, isLoading }) => {
                                             )}
                                             {onDelete && (
                                                 <button
-                                                    onClick={() => onDelete(item.id)}
+                                                    onClick={() => onDelete(item._id || item.id)}
                                                     className="text-red-500 hover:text-red-700 transition-colors"
                                                 >
                                                     <Trash2 size={18} />

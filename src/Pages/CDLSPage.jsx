@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MapPin, Mail, Phone, ArrowRight, Wifi, Wind, Zap, Users, MonitorPlay, Clock, Camera, ShieldCheck, Armchair } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import InterestedIndividualForm from './Members/components/InterestedIndividualForm';
 
 const CDLSPage = () => {
+    const [showForm, setShowForm] = useState(false);
+
     return (
         <div className="bg-white min-h-screen font-sans">
             <Header />
@@ -17,7 +20,10 @@ const CDLSPage = () => {
                             KSUM PARTNERED
                         </button>
 
-                        <button className="bg-gradient-to-r from-[#7B5AFF] to-[#5F3DC4] text-white px-8 py-3 rounded-full font-bold flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        <button
+                            onClick={() => setShowForm(true)}
+                            className="bg-gradient-to-r from-[#7B5AFF] to-[#5F3DC4] text-white px-8 py-3 rounded-full font-bold flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                        >
                             Book Now <ArrowRight size={18} className="ml-2" />
                         </button>
                     </div>
@@ -156,8 +162,29 @@ const CDLSPage = () => {
                 </div>
             </main>
 
+
             <Footer />
-        </div>
+
+            {/* Modal */}
+            {
+                showForm && (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                        <div className="relative w-full max-w-4xl my-8">
+                            {/* Stop propagation so clicking form doesn't close it */}
+                            <div onClick={(e) => e.stopPropagation()}>
+                                <InterestedIndividualForm
+                                    onClose={() => setShowForm(false)}
+                                    messagePlaceholder="Tell Us About Your Company.."
+                                    category="book_now"
+                                />
+                            </div>
+                        </div>
+                        {/* Close modal when clicking backdrop */}
+                        <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
+                    </div>
+                )
+            }
+        </div >
     );
 };
 
