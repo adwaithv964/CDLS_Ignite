@@ -9,3 +9,9 @@ gunicorn
 psycopg2-binary
 dj-database-url
 whitenoise
+requests
+urllib3
+certifi
+charset-normalizer
+idna
+Pillow
