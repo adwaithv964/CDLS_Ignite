@@ -1,8 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, ArrowRight, X } from 'lucide-react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            // Optionally store token if needed for other parts of app, though Firebase handles auth state.
+            const token = await user.getIdToken();
+            localStorage.setItem('token', token); // Keep this if other components rely on it, but ideally migrate to auth.currentUser or onAuthStateChanged
+            navigate('/');
+        } catch (err) {
+            setError('Login failed. Please check your credentials.');
+            console.error(err);
+        }
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
             <div className="w-full max-w-md relative">
@@ -50,13 +73,17 @@ const Login = () => {
                 </div>
 
                 {/* Login credentials form */}
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    {error && <div className="text-red-500 text-sm text-center">{error}</div>}
                     <div>
                         <label className="block text-xl font-serif text-gray-800 mb-2">Email</label>
                         <input
                             type="email"
                             placeholder="E.g. johndoe@email.com"
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-500 text-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
 
@@ -64,8 +91,11 @@ const Login = () => {
                         <label className="block text-xl font-serif text-gray-800 mb-2">Password</label>
                         <input
                             type="password"
-                            placeholder="E.g. johndoe@email.com" // Placeholder matches design even if unusual for password
+                            placeholder="Type your password"
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-500 text-lg placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </div>
 
@@ -111,5 +141,6 @@ const Login = () => {
         </div>
     );
 };
+
 
 export default Login;

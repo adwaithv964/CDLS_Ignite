@@ -127,6 +127,7 @@ const Volunteer = () => {
                             <InterestedIndividualForm
                                 onClose={() => setShowForm(false)}
                                 messagePlaceholder="Tell Us About Your Interests.."
+                                category="volunteer"
                             />
                         </div>
                     </div>

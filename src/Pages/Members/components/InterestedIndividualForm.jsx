@@ -1,7 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileText, X } from 'lucide-react';
+import api from '../../../api/axios';
 
-const InterestedIndividualForm = ({ onClose, messagePlaceholder = "Tell Us About Your Company.." }) => {
+const InterestedIndividualForm = ({ onClose, messagePlaceholder = "Tell Us About Your Company..", category = 'general' }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+        category: category
+    });
+    const [status, setStatus] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('sending');
+        try {
+            await api.post('/core/interest/', { ...formData, category });
+            setStatus('success');
+            setFormData({ name: '', email: '', phone: '', message: '', category: category });
+            setTimeout(() => {
+                if (onClose) onClose();
+                setStatus('');
+            }, 2000);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setStatus('error');
+        }
+    };
     return (
         <div className="bg-[#0B2136] relative overflow-hidden p-8 md:p-12 rounded-lg max-w-4xl w-full text-white shadow-2xl">
             {/* Background pattern */}
@@ -33,36 +63,55 @@ const InterestedIndividualForm = ({ onClose, messagePlaceholder = "Tell Us About
                 </div>
 
                 {/* Application form */}
-                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    {status === 'success' && <div className="text-[#00D2AA] text-center font-bold">Details submitted successfully! We will contact you soon.</div>}
+                    {status === 'error' && <div className="text-red-500 text-center font-bold">Failed to submit details. Please try again.</div>}
+
                     <div className="space-y-4">
                         <input
                             type="text"
+                            name="name"
                             placeholder="Your Name"
                             className="w-full bg-white text-gray-800 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#00D2AA]"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
                         />
                         <input
                             type="email"
+                            name="email"
                             placeholder="Your Email"
                             className="w-full bg-white text-gray-800 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#00D2AA]"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                         />
                         <input
                             type="tel"
+                            name="phone"
                             placeholder="Phone"
                             className="w-full bg-white text-gray-800 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#00D2AA]"
+                            value={formData.phone}
+                            onChange={handleChange}
                         />
                         <textarea
+                            name="message"
                             placeholder={messagePlaceholder}
                             rows="4"
                             className="w-full bg-white text-gray-800 rounded-md py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#00D2AA] resize-none"
+                            value={formData.message}
+                            onChange={handleChange}
+                            required
                         ></textarea>
                     </div>
 
                     <div className="flex justify-end pt-4">
                         <button
                             type="submit"
-                            className="bg-[#00D2AA] hover:bg-teal-500 text-white font-bold py-3 px-8 rounded flex items-center transition-colors uppercase tracking-wide"
+                            disabled={status === 'sending'}
+                            className="bg-[#00D2AA] hover:bg-teal-500 text-white font-bold py-3 px-8 rounded flex items-center transition-colors uppercase tracking-wide disabled:opacity-50"
                         >
-                            Submit Now
+                            {status === 'sending' ? 'Submitting...' : 'Submit Now'}
                         </button>
                     </div>
                 </form>

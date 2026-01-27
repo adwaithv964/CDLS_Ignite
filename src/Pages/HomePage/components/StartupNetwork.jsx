@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import InterestedIndividualForm from '../../Members/components/InterestedIndividualForm';
+
 const mashLogo = "/assets/mash_logo_v2.png";
 const noteLogo = "/assets/note_logo_v2.png";
 const founderMash = "/assets/image_5.png";
@@ -9,6 +11,8 @@ const starGreen = "/assets/star_green.png";
 const contour = "/assets/contour.png";
 
 const StartupNetwork = () => {
+    const [showForm, setShowForm] = useState(false);
+
     return (
         <section className="py-24 bg-white relative overflow-hidden font-sans">
             {/* Background decorations */}
@@ -32,9 +36,16 @@ const StartupNetwork = () => {
                         <span className="text-[#2DD4BF] font-extrabold tracking-[0.2em] uppercase text-xs">STARTUPS</span>
                         <span className="text-orange-400 text-xs rotate-45 border border-orange-400 w-2 h-2 block"></span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#0E1C2F]">
+                    <h2 className="text-4xl md:text-5xl font-bold text-[#0E1C2F] mb-6">
                         CDLS <span className="text-[#FF6B6B]">Startup</span> Network
                     </h2>
+
+                    <button
+                        onClick={() => setShowForm(true)}
+                        className="bg-[#2DD4BF] hover:bg-teal-400 text-[#0b132b] px-8 py-3 rounded-full font-bold transition-transform transform hover:-translate-y-1 inline-flex items-center shadow-lg"
+                    >
+                        Join Our Network
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -102,6 +113,23 @@ const StartupNetwork = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            {showForm && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="relative w-full max-w-4xl my-8">
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <InterestedIndividualForm
+                                onClose={() => setShowForm(false)}
+                                messagePlaceholder="Tell Us About Your Startup..."
+                                category="startup"
+                            />
+                        </div>
+                    </div>
+                    {/* Close handler */}
+                    <div className="absolute inset-0 -z-10" onClick={() => setShowForm(false)}></div>
+                </div>
+            )}
         </section>
     );
 };

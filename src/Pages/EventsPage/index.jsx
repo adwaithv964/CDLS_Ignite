@@ -2,147 +2,47 @@ import React, { useState } from 'react';
 import { Clock, MapPin, ArrowRight, Plus } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import api from '../../api/axios';
 
 const EventsPage = () => {
     const [activeTab, setActiveTab] = useState('upcoming');
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const upcomingSessions = [
-        {
-            id: 1,
-            title: "Robotics For Daily Life And Innovation",
-            type: "Beginners",
-            typeColor: "bg-purple-500",
-            registrations: 20,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            status: "Open",
-            isOpen: true,
-            imageColor: "bg-blue-100",
-            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
-        },
-        {
-            id: 2,
-            title: "Session On Digital Marketing",
-            type: "Advanced",
-            typeColor: "bg-purple-600",
-            registrations: 25,
-            date: "11 April",
-            time: "12:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            status: "Closed",
-            isOpen: false,
-            imageColor: "bg-sky-100",
-            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
-        },
-        {
-            id: 3,
-            title: "Web Developement For Beginners",
-            type: "Hands-on",
-            typeColor: "bg-indigo-500",
-            registrations: 5,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            status: "Open",
-            isOpen: true,
-            imageColor: "bg-yellow-100",
-            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
-        }
-    ];
+    React.useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await api.get('/events/');
+                setEvents(response.data);
+            } catch (error) {
+                console.error("Failed to fetch events", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchEvents();
+    }, []);
 
-    const earlierSessions = [
-        {
-            id: 101,
-            title: "Robotics For Daily Life And Innovation",
-            type: "Beginners",
-            typeColor: "bg-purple-500",
-            registrations: 20,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            imageColor: "bg-blue-100",
-            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
-        },
-        {
-            id: 102,
-            title: "Session On Digital Marketing",
-            type: "Advanced",
-            typeColor: "bg-purple-600",
-            registrations: 35,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            imageColor: "bg-sky-100",
-            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
-        },
-        {
-            id: 103,
-            title: "Web Developement For Beginners",
-            type: "Hands-on",
-            typeColor: "bg-indigo-500",
-            registrations: 5,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            imageColor: "bg-yellow-100",
-            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
-        },
-        {
-            id: 104,
-            title: "Robotics For Daily Life And Innovation",
-            type: "Beginners",
-            typeColor: "bg-purple-500",
-            registrations: 20,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            imageColor: "bg-blue-100",
-            image: "https://store-usa.arduino.cc/cdn/shop/files/AKX00022_14.extra-8_934x700.jpg?v=1727102968"
-        },
-        {
-            id: 105,
-            title: "Session On Digital Marketing",
-            type: "Advanced",
-            typeColor: "bg-purple-600",
-            registrations: 35,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            imageColor: "bg-sky-100",
-            image: "https://img.freepik.com/premium-vector/data-graphic-laptop-smartphone-success-modern-business-data-resources_548646-292.jpg"
-        },
-        {
-            id: 106,
-            title: "Web Developement For Beginners",
-            type: "Hands-on",
-            typeColor: "bg-indigo-500",
-            registrations: 5,
-            date: "10 April",
-            time: "10:00 AM",
-            location: "CDLS Office",
-            author: "Sara Francis",
-            dept: "Department of Robotics: NIT Calicut",
-            imageColor: "bg-yellow-100",
-            image: "https://ops1.vnaya.com/en/assets/Backend/upload//1662642353featur_img.jpeg"
-        }
-    ];
+    const mapEvent = (event) => ({
+        id: event.id,
+        title: event.title,
+        type: event.type,
+        typeColor: event.type_color,
+        registrations: event.registrations,
+        date: event.date,
+        time: event.time,
+        location: event.location,
+        author: event.author,
+        dept: event.dept,
+        status: event.status,
+        isOpen: event.is_open,
+        imageColor: event.image_color,
+        image: event.image
+    });
+
+    const upcomingSessions = events.filter(e => e.status !== 'Closed').map(mapEvent);
+    const earlierSessions = events.filter(e => e.status === 'Closed').map(mapEvent);
+
 
     const renderCard = (session, isEarlier = false) => (
         <div key={session.id} className="bg-white p-6 rounded-none shadow-sm h-full flex flex-col justify-between hover:shadow-md transition-shadow border border-gray-100">

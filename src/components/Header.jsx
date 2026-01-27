@@ -58,7 +58,7 @@ const Header = () => {
                             <Link to="/events" className={`${isActive('/events')} font-medium transition-colors`}>Events</Link>
                             <Link to="/members" className={`${isActive('/members')} font-medium transition-colors`}>Members</Link>
                             <Link to="/community" className={`${isActive('/community')} font-medium transition-colors`}>Community</Link>
-                            <a href="#" className="text-[#1B2A41] hover:text-[#F15A29] font-medium transition-colors">CDLS</a>
+                            <Link to="/cdls" className={`${isActive('/cdls')} font-medium transition-colors`}>CDLS</Link>
                         </div>
 
                         {/* Action Buttons */}
@@ -92,7 +92,7 @@ const Header = () => {
                             <Link to="/events" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/events' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Events</Link>
                             <Link to="/members" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/members' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Members</Link>
                             <Link to="/community" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/community' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Community</Link>
-                            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">CDLS</a>
+                            <Link to="/cdls" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/cdls' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>CDLS</Link>
                             <div className="px-3 py-2 flex flex-col space-y-3 mt-4 border-t pt-4">
                                 <Link to="/login" className="block w-full text-center bg-[#00D2AA] text-white px-5 py-2 rounded-full font-medium">
                                     Login

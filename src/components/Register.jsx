@@ -1,8 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 const Register = () => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (password !== confirmPassword) {
+            setError("Passwords don't match");
+            return;
+        }
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            // Optionally update profile with name using updateProfile(auth.currentUser, { displayName: name })
+            navigate('/'); // Redirect to home or dashboard after successful registration (auto-login usually)
+        } catch (err) {
+            setError(err.message || 'Registration failed. Please try again.');
+            console.error(err);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-white flex items-center justify-center p-4 relative">
             {/* Close button */}
@@ -39,12 +67,16 @@ const Register = () => {
                         <span className="text-dark font-medium">SignUp with Google</span>
                     </button>
 
-                    <form className="space-y-6 text-left">
+                    <form className="space-y-6 text-left" onSubmit={handleSubmit}>
+                        {error && <div className="text-red-500 text-sm text-center">{error}</div>}
                         <div>
                             <label className="block text-dark text-lg mb-2 font-serif">Your Name</label>
                             <input
                                 type="text"
                                 className="w-full bg-gray-100 border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:bg-white transition-all"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
                             />
                         </div>
 
@@ -53,6 +85,9 @@ const Register = () => {
                             <input
                                 type="email"
                                 className="w-full bg-gray-100 border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:bg-white transition-all"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
                             />
                         </div>
 
@@ -61,6 +96,9 @@ const Register = () => {
                             <input
                                 type="password"
                                 className="w-full bg-gray-100 border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:bg-white transition-all"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
                             />
                         </div>
 
@@ -69,6 +107,9 @@ const Register = () => {
                             <input
                                 type="password"
                                 className="w-full bg-gray-100 border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:bg-white transition-all"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
                             />
                         </div>
 

@@ -87,12 +87,14 @@ const CoWorks = () => {
                             businesses a collaborative hub for ideas, projects, and growth.
                         </p>
 
-                        <button
-                            onClick={() => setShowForm(true)}
-                            className="bg-[#22C59E] hover:bg-teal-500 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30"
+                        <a
+                            href="https://cdls.in"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-[#22C59E] hover:bg-teal-500 text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg shadow-teal-500/30 w-fit"
                         >
-                            Apply Now <ArrowRight size={18} className="ml-2" />
-                        </button>
+                            Explore more <ArrowRight size={18} className="ml-2" />
+                        </a>
                     </div>
                 </div>
             </div>
@@ -105,6 +107,7 @@ const CoWorks = () => {
                             <InterestedIndividualForm
                                 onClose={() => setShowForm(false)}
                                 messagePlaceholder="Tell Us About Your Company.."
+                                category="coworker"
                             />
                         </div>
                     </div>

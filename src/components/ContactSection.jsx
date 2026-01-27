@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import api from '../api/axios';
 const asterisk = "/assets/asterisk.png";
 
 const ContactSection = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [status, setStatus] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('sending');
+        try {
+            await api.post('/core/contact/', formData);
+            setStatus('success');
+            setFormData({ name: '', email: '', message: '' });
+        } catch (error) {
+            console.error('Error sending message:', error);
+            setStatus('error');
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     return (
         <section className="relative py-24 font-sans bg-[#0B1A2F]">
             {/* Background image */}
@@ -49,26 +74,40 @@ const ContactSection = () => {
                             </svg>
                         </div>
 
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            {status === 'success' && <div className="text-green-500 text-center">Message sent successfully!</div>}
+                            {status === 'error' && <div className="text-red-500 text-center">Failed to send message. Please try again.</div>}
                             <div>
                                 <input
                                     type="text"
+                                    name="name"
                                     placeholder="Enter your Name"
                                     className="w-full bg-[#f1f5f9] text-gray-800 rounded-full px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#10b981] placeholder-gray-500"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div>
                                 <input
                                     type="email"
+                                    name="email"
                                     placeholder="Enter your email"
                                     className="w-full bg-[#f1f5f9] text-gray-800 rounded-full px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#10b981] placeholder-gray-500"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div>
                                 <textarea
+                                    name="message"
                                     placeholder="Type your message Here"
                                     rows="4"
                                     className="w-full bg-[#f1f5f9] text-gray-800 rounded-3xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#10b981] placeholder-gray-500 resize-none"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    required
                                 ></textarea>
                             </div>
 
@@ -82,8 +121,8 @@ const ContactSection = () => {
                                     </svg>
                                 </div>
 
-                                <button type="submit" className="bg-[#2DD4BF] hover:bg-[#14b8a6] text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg">
-                                    Submit <ArrowRight size={18} className="ml-2" />
+                                <button type="submit" disabled={status === 'sending'} className="bg-[#2DD4BF] hover:bg-[#14b8a6] text-white px-8 py-3 rounded-full font-medium transition-colors flex items-center shadow-lg disabled:opacity-50">
+                                    {status === 'sending' ? 'Sending...' : 'Submit'} <ArrowRight size={18} className="ml-2" />
                                 </button>
                             </div>
                         </form>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, MapPin, Laptop } from 'lucide-react';
+import api from '../api/axios';
 
 const Footer = () => {
     return (
@@ -43,19 +44,7 @@ const Footer = () => {
                         </div>
                         <div className="w-full">
                             <h4 className="text-[#10b981] font-medium text-sm mb-2">Subscribe:</h4>
-                            <form className="mt-4">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email:"
-                                    className="w-full bg-[#f3f4f6] text-gray-800 px-4 py-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#10b981]"
-                                />
-                                <button
-                                    type="submit"
-                                    className="bg-[#10b981] hover:bg-[#059669] text-white font-bold py-3 px-6 rounded uppercase text-sm tracking-wider transition-colors w-full sm:w-auto"
-                                >
-                                    Subscribe Now
-                                </button>
-                            </form>
+                            <NewsletterForm />
                         </div>
                     </div>
                 </div>
@@ -75,6 +64,46 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
+    );
+};
+
+const NewsletterForm = () => {
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('sending');
+        try {
+            await api.post('/core/subscribe/', { email });
+            setStatus('success');
+            setEmail('');
+        } catch (error) {
+            console.error(error);
+            setStatus('error');
+        }
+    };
+
+    return (
+        <form className="mt-4" onSubmit={handleSubmit}>
+            {status === 'success' && <div className="text-[#10b981] mb-2 text-sm">Subscribed successfully!</div>}
+            {status === 'error' && <div className="text-red-500 mb-2 text-sm">Subscription failed. Try again.</div>}
+            <input
+                type="email"
+                placeholder="Enter your email:"
+                className="w-full bg-[#f3f4f6] text-gray-800 px-4 py-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#10b981]"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+            />
+            <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="bg-[#10b981] hover:bg-[#059669] text-white font-bold py-3 px-6 rounded uppercase text-sm tracking-wider transition-colors w-full sm:w-auto disabled:opacity-50"
+            >
+                {status === 'sending' ? 'Subscribing...' : 'Subscribe Now'}
+            </button>
+        </form>
     );
 };
 
