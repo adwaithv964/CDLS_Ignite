@@ -226,20 +226,15 @@ const EventsPage = () => {
                 <div className="flex flex-col lg:flex-row justify-between items-center mb-24 relative mt-10">
                     {/* Left Column Text */}
                     <div className="lg:w-1/2 pr-0 lg:pr-12 mb-16 lg:mb-0 relative z-10 w-full">
-                        <span className="text-[#8B5CF6] font-bold tracking-widest text-xs uppercase mb-4 block">FROM CODE TO CLOUD!!</span>
+                        <span className="text-[#8B5CF6] font-bold tracking-widest text-xs uppercase mb-4 block">FROM LEARNING TO GROW!!</span>
                         <h1 className="text-4xl lg:text-5xl font-extrabold text-[#1B2A41] mb-6 leading-tight">
-                            Host It Right! Explore The<br />
-                            Essentials Of Website<br />
-                            Hosting.
+                            CDLS Learning & Community Events
                         </h1>
                         <p className="text-gray-500 text-sm leading-relaxed max-w-xl mb-12">
-                            This session introduces the fundamentals of website hosting —
-                            the essential step that makes your website accessible to the
-                            world. Participants will learn what web hosting is, how it works,
-                            and the different types of hosting services available. The session
-                            will also cover practical aspects like choosing a hosting
-                            provider, setting up a domain, and deploying a simple website
-                            online.
+                            CDLS events are designed to inspire learning, collaboration, and skill development.
+They include workshops, talks, and interactive sessions led by experienced mentors.
+Learners get opportunities to connect, share ideas, and build a strong learning community.
+Each event focuses on practical knowledge and personal growth through real-world experiences.
                         </p>
 
                         {/* Dotted Arrow Decoration */}

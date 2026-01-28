@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 
 // ⚙️ MAINTENANCE MODE TOGGLE
 // Set to true to enable maintenance mode, false to show normal page
+// (Maintenance Mode Active)
 const MAINTENANCE_MODE = true;
 
 const Members = () => {
