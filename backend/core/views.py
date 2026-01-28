@@ -310,3 +310,171 @@ def dashboard_stats_mongo(request):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# ============================================================================
+# MAINTENANCE MODE API
+# ============================================================================
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def maintenance_status(request):
+    """Get maintenance status for all pages or a specific page"""
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        page_key = request.query_params.get('page')
+        
+        if page_key:
+            setting = db.maintenance_settings.find_one({'page_key': page_key})
+            if not setting:
+                return Response({"is_maintenance": False, "message": None, "estimated_return": None}, status=status.HTTP_200_OK)
+            
+            return Response({
+                "is_maintenance": setting.get('is_maintenance', False),
+                "message": setting.get('message'),
+                "estimated_return": setting.get('estimated_return').isoformat() if setting.get('estimated_return') else None,
+                "page_name": setting.get('page_name')
+            }, status=status.HTTP_200_OK)
+        else:
+            settings = list(db.maintenance_settings.find())
+            result = {}
+            for setting in settings:
+                result[setting['page_key']] = {
+                    "is_maintenance": setting.get('is_maintenance', False),
+                    "message": setting.get('message'),
+                    "estimated_return": setting.get('estimated_return').isoformat() if setting.get('estimated_return') else None,
+                    "page_name": setting.get('page_name')
+                }
+            return Response(result, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@csrf_exempt
+@api_view(['GET', 'PUT'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def maintenance_settings_detail(request, page_key):
+    """Get or update maintenance settings for a specific page"""
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        if request.method == 'GET':
+            setting = db.maintenance_settings.find_one({'page_key': page_key})
+            if not setting:
+                return Response({"error": "Page not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+            setting['_id'] = str(setting['_id'])
+            if setting.get('created_at'):
+                setting['created_at'] = setting['created_at'].isoformat()
+            if setting.get('updated_at'):
+                setting['updated_at'] = setting['updated_at'].isoformat()
+            if setting.get('estimated_return'):
+                setting['estimated_return'] = setting['estimated_return'].isoformat()
+            return Response(setting, status=status.HTTP_200_OK)
+        
+        elif request.method == 'PUT':
+            data = request.data
+            if 'is_maintenance' not in data:
+                return Response({"error": "is_maintenance is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            estimated_return = None
+            if data.get('estimated_return'):
+                try:
+                    from dateutil import parser
+                    estimated_return = parser.isoparse(data['estimated_return'])
+                except:
+                    estimated_return = None
+            
+            update_data = {
+                'is_maintenance': data['is_maintenance'],
+                'message': data.get('message', ''),
+                'estimated_return': estimated_return,
+                'updated_at': datetime.datetime.utcnow()
+            }
+            
+            result = db.maintenance_settings.update_one({'page_key': page_key}, {'$set': update_data})
+            if result.matched_count == 0:
+                return Response({"error": "Page not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+            updated_setting = db.maintenance_settings.find_one({'page_key': page_key})
+            updated_setting['_id'] = str(updated_setting['_id'])
+            if updated_setting.get('created_at'):
+                updated_setting['created_at'] = updated_setting['created_at'].isoformat()
+            if updated_setting.get('updated_at'):
+                updated_setting['updated_at'] = updated_setting['updated_at'].isoformat()
+            if updated_setting.get('estimated_return'):
+                updated_setting['estimated_return'] = updated_setting['estimated_return'].isoformat()
+            
+            return Response({"success": True, "message": "Settings updated", "data": updated_setting}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@csrf_exempt
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def maintenance_settings_list(request):
+    """Get all maintenance settings"""
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        settings = list(db.maintenance_settings.find().sort('page_name', 1))
+        for setting in settings:
+            setting['_id'] = str(setting['_id'])
+            if setting.get('created_at'):
+                setting['created_at'] = setting['created_at'].isoformat()
+            if setting.get('updated_at'):
+                setting['updated_at'] = setting['updated_at'].isoformat()
+            if setting.get('estimated_return'):
+                setting['estimated_return'] = setting['estimated_return'].isoformat()
+        return Response(settings, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@csrf_exempt
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def maintenance_init(request):
+    """Initialize maintenance settings with default pages"""
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        existing_count = db.maintenance_settings.count_documents({})
+        if existing_count > 0:
+            return Response({"message": "Already initialized", "count": existing_count}, status=status.HTTP_200_OK)
+        
+        default_pages = [
+            {"page_key": "members", "page_name": "Members", "is_maintenance": False, 
+             "message": "We're upgrading our Members section to serve you better!", 
+             "estimated_return": None, "created_at": datetime.datetime.utcnow(), "updated_at": datetime.datetime.utcnow()},
+            {"page_key": "events", "page_name": "Events", "is_maintenance": False,
+             "message": "We're enhancing the Events experience!", 
+             "estimated_return": None, "created_at": datetime.datetime.utcnow(), "updated_at": datetime.datetime.utcnow()},
+            {"page_key": "community", "page_name": "Community", "is_maintenance": False,
+             "message": "We're improving our Community features!", 
+             "estimated_return": None, "created_at": datetime.datetime.utcnow(), "updated_at": datetime.datetime.utcnow()},
+            {"page_key": "cdls", "page_name": "CDLS", "is_maintenance": False,
+             "message": "We're updating the CDLS page!", 
+             "estimated_return": None, "created_at": datetime.datetime.utcnow(), "updated_at": datetime.datetime.utcnow()}
+        ]
+        
+        result = db.maintenance_settings.insert_many(default_pages)
+        return Response({
+            "success": True, 
+            "message": f"Initialized {len(result.inserted_ids)} settings",
+            "pages": [p['page_name'] for p in default_pages]
+        }, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

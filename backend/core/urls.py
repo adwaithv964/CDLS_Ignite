@@ -5,7 +5,8 @@ from .views import (
     contact_create_mongo, contact_list_mongo, contact_delete_mongo,
     interest_create_mongo, interest_list_mongo, interest_delete_mongo,
     subscriber_create_mongo, subscriber_list_mongo, subscriber_delete_mongo,
-    dashboard_stats_mongo
+    dashboard_stats_mongo,
+    maintenance_status, maintenance_settings_detail, maintenance_settings_list, maintenance_init
 )
 
 urlpatterns = [
@@ -25,4 +26,10 @@ urlpatterns = [
     path('interest/delete/<str:object_id>/', interest_delete_mongo, name='interest-delete-mongo'),
     path('subscribe/delete/<str:object_id>/', subscriber_delete_mongo, name='subscriber-delete-mongo'),
     path('dashboard/stats/', dashboard_stats_mongo, name='dashboard-stats-mongo'),
+    
+    # Maintenance mode endpoints
+    path('maintenance/status/', maintenance_status, name='maintenance-status'),
+    path('maintenance/settings/', maintenance_settings_list, name='maintenance-settings-list'),
+    path('maintenance/settings/<str:page_key>/', maintenance_settings_detail, name='maintenance-settings-detail'),
+    path('maintenance/init/', maintenance_init, name='maintenance-init'),
 ]

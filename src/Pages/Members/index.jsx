@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { Users, Briefcase, GraduationCap, Grip, ArrowRight, Construction, Clock, Wrench } from 'lucide-react';
+import { Users, Briefcase, GraduationCap, ArrowRight } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-
-// ⚙️ MAINTENANCE MODE TOGGLE
-// Set to true to enable maintenance mode, false to show normal page
-const MAINTENANCE_MODE = true;
+import MaintenanceWrapper from '../../components/MaintenanceWrapper';
 
 const Members = () => {
     const [activeTab, setActiveTab] = useState('learners');
@@ -388,4 +385,9 @@ const Members = () => {
     );
 };
 
-export default Members;
+// Wrap with MaintenanceWrapper for dynamic maintenance control
+export default () => (
+    <MaintenanceWrapper pageKey="members">
+        <Members />
+    </MaintenanceWrapper>
+);

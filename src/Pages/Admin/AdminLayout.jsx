@@ -9,7 +9,8 @@ import {
     Briefcase,
     Heart,
     Rocket,
-    Rss
+    Rss,
+    Settings
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -37,6 +38,7 @@ const AdminLayout = () => {
         { path: '/admin/community-events', icon: <Rocket size={20} />, label: 'Community Events' },
         { path: '/admin/inquiries', icon: <Mail size={20} />, label: 'Inquiries' },
         { path: '/admin/subscribers', icon: <Rss size={20} />, label: 'Subscribers' },
+        { path: '/admin/maintenance', icon: <Settings size={20} />, label: 'Maintenance' },
     ];
 
     return (

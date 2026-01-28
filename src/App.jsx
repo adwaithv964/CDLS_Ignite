@@ -18,6 +18,7 @@ import CommunityEventsManager from './Pages/Admin/CommunityEventsManager';
 import InterestsManager from './Pages/Admin/InterestsManager';
 import InquiriesManager from './Pages/Admin/InquiriesManager';
 import SubscribersManager from './Pages/Admin/SubscribersManager';
+import MaintenanceSettings from './Pages/Admin/MaintenanceSettings';
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
                         <Route path="interests/:category" element={<InterestsManager />} />
                         <Route path="inquiries" element={<InquiriesManager />} />
                         <Route path="subscribers" element={<SubscribersManager />} />
+                        <Route path="maintenance" element={<MaintenanceSettings />} />
                     </Route>
                 </Routes>
             </div>
