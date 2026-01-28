@@ -4,19 +4,19 @@ import { Share2 } from 'lucide-react';
 const AdvisoryPanel = () => {
     const advisors = [
         {
-            name: "JAISON N D",
-            role: "Secretary - Panangad",
-            location: "Grama Panchayat",
-            image: "/assets/guidence_img_1.png"
-        },
-        {
-            name: "FAWAS SHAMEEM",
+            name: "FAWAS SHAMEEM T K",
             role: "Secretary - Thamarassery",
             location: "Grama Panchayat",
             image: "/assets/guidence_img_2.jpeg"
         },
         {
-            name: "MEHAR MOOSA",
+            name: "Jaisen Nedumpala",
+            role: "Secretary - Panangad",
+            location: "Grama Panchayat",
+            image: "/assets/guidence_img_1.png"
+        },
+        {
+            name: "Moosa Mehar",
             role: "Co-Founder",
             location: "TinkerSpace",
             image: "/assets/guidence_img_3.jpg"

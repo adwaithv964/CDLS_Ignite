@@ -58,14 +58,10 @@ const ContactSection = () => {
                         <div className="absolute -top-10 -left-10 w-12 h-12 border-t-4 border-l-4 border-[#10b981] rounded-full opacity-80" style={{ transform: 'rotate(-45deg)' }}></div>
 
                         <span className="text-[#ff5722] font-semibold tracking-wide text-lg block mb-2">Get In Touch</span>
-                        <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">How Can We Help You?</h2>
+                        <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">Join CDLS as a learner</h2>
 
                         <p className="text-gray-300 text-lg leading-relaxed mb-8 max-w-lg">
-                            We are here to support you with all your questions and
-                            concerns about the Community Digital Learning Space.
-                            Whether you need information about our facilities,
-                            programs, or how to get involved, our team is always ready
-                            to guide you.
+                            Join CDLS as a learner member to explore new knowledge and develop practical skills. Take part in learning programs, workshops, and events conducted at CDLS, designed to support personal and professional growth. Connect with like-minded learners, share ideas, collaborate, and build your own learner community.
                         </p>
 
                         {/* Decorative element */}
