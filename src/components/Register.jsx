@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 
@@ -11,6 +11,7 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +25,13 @@ const Register = () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             // Optionally update profile with name using updateProfile(auth.currentUser, { displayName: name })
-            navigate('/'); // Redirect to home or dashboard after successful registration (auto-login usually)
+
+            // Check for redirect path in location state
+            if (location.state && location.state.from) {
+                navigate(location.state.from, { replace: true });
+            } else {
+                navigate('/'); // Redirect to home or dashboard after successful registration (auto-login usually)
+            }
         } catch (err) {
             setError(err.message || 'Registration failed. Please try again.');
             console.error(err);

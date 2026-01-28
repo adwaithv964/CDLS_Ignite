@@ -15,7 +15,7 @@ const AdminLogin = () => {
         try {
             const response = await api.post('/auth/login/', { email, password });
             const token = response.data.key;
-            localStorage.setItem('token', token);
+            localStorage.setItem('adminToken', token); // Changed from 'token' to 'adminToken'
             navigate('/admin/dashboard');
         } catch (err) {
             setError('Login failed. Ensure you have admin privileges.');

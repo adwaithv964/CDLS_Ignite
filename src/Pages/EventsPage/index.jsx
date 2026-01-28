@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, MapPin, ArrowRight, Plus } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import api from '../../api/axios';
@@ -11,6 +12,27 @@ const EventsPage = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Check for redirect action
+    React.useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const action = params.get('action');
+        const eventId = params.get('eventId');
+
+        if (action === 'register' && eventId && events.length > 0) {
+            const eventToSelect = events.find(e => e.id.toString() === eventId);
+            if (eventToSelect) {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    setSelectedEvent(mapEvent(eventToSelect));
+                    // Clean up URL
+                    navigate('/events', { replace: true });
+                }
+            }
+        }
+    }, [events, location.search, navigate]);
 
     React.useEffect(() => {
         const fetchEvents = async () => {
@@ -158,7 +180,16 @@ const EventsPage = () => {
                                 <span className="font-bold text-[#1B2A41]">{displayStatus}</span>
                                 {showRegister ? (
                                     <button
-                                        onClick={() => setSelectedEvent(session)}
+                                        onClick={() => {
+                                            const token = localStorage.getItem('token');
+                                            if (!token) {
+                                                navigate('/login', {
+                                                    state: { from: `/events?action=register&eventId=${session.id}` }
+                                                });
+                                            } else {
+                                                setSelectedEvent(session);
+                                            }
+                                        }}
                                         className="bg-[#1B2A41] hover:bg-black text-white px-4 py-2 rounded transition-colors"
                                     >
                                         Register Now

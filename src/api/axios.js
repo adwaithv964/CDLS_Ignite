@@ -11,7 +11,19 @@ const api = axios.create({
 // Add a request interceptor to attach the auth token if it exists
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
+        // Check if it's an admin API call
+        const isAdminCall = config.url.includes('/auth/') ||
+            config.url.includes('/events/') ||
+            config.url.includes('/core/interest/') ||
+            config.url.includes('/core/inquiry/') ||
+            config.url.includes('/core/subscribers/') ||
+            config.url.includes('/core/community-events/');
+
+        // Use adminToken for admin calls, regular token for user calls
+        const token = isAdminCall
+            ? localStorage.getItem('adminToken')
+            : localStorage.getItem('token');
+
         if (token) {
             config.headers.Authorization = `Token ${token}`;
         }

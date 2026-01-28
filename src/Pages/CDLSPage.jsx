@@ -1,11 +1,39 @@
 import React, { useState } from 'react';
 import { MapPin, Mail, Phone, ArrowRight, Wifi, Wind, Zap, Users, MonitorPlay, Clock, Camera, ShieldCheck, Armchair } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import InterestedIndividualForm from './Members/components/InterestedIndividualForm';
 
 const CDLSPage = () => {
     const [showForm, setShowForm] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Check for redirect action
+    React.useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const action = params.get('action');
+
+        if (action === 'cdls_book') {
+            const token = localStorage.getItem('token');
+            if (token) {
+                setShowForm(true);
+                navigate('/cdls', { replace: true });
+            }
+        }
+    }, [location.search, navigate]);
+
+    const handleBookClick = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login', {
+                state: { from: `/cdls?action=cdls_book` }
+            });
+        } else {
+            setShowForm(true);
+        }
+    };
 
     return (
         <div className="bg-white min-h-screen font-sans">
@@ -21,7 +49,7 @@ const CDLSPage = () => {
                         </button>
 
                         <button
-                            onClick={() => setShowForm(true)}
+                            onClick={handleBookClick}
                             className="bg-gradient-to-r from-[#7B5AFF] to-[#5F3DC4] text-white px-8 py-3 rounded-full font-bold flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
                         >
                             Book Now <ArrowRight size={18} className="ml-2" />
@@ -175,7 +203,7 @@ const CDLSPage = () => {
                                 <InterestedIndividualForm
                                     onClose={() => setShowForm(false)}
                                     messagePlaceholder="Tell Us About Your Company.."
-                                    category="book_now"
+                                    category="coworker"
                                 />
                             </div>
                         </div>

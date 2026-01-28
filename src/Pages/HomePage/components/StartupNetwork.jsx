@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import InterestedIndividualForm from '../../Members/components/InterestedIndividualForm';
 
 const mashLogo = "/assets/mash_logo_v2.png";
@@ -12,6 +13,33 @@ const contour = "/assets/contour.png";
 
 const StartupNetwork = () => {
     const [showForm, setShowForm] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Check for redirect action
+    React.useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const action = params.get('action');
+
+        if (action === 'startup_join') {
+            const token = localStorage.getItem('token');
+            if (token) {
+                setShowForm(true);
+                navigate('/', { replace: true });
+            }
+        }
+    }, [location.search, navigate]);
+
+    const handleJoinClick = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login', {
+                state: { from: `/?action=startup_join` }
+            });
+        } else {
+            setShowForm(true);
+        }
+    };
 
     return (
         <section className="py-24 bg-white relative overflow-hidden font-sans">
@@ -41,7 +69,7 @@ const StartupNetwork = () => {
                     </h2>
 
                     <button
-                        onClick={() => setShowForm(true)}
+                        onClick={handleJoinClick}
                         className="bg-[#2DD4BF] hover:bg-teal-400 text-[#0b132b] px-8 py-3 rounded-full font-bold transition-transform transform hover:-translate-y-1 inline-flex items-center shadow-lg"
                     >
                         Join Our Network

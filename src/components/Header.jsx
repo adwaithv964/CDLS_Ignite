@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
-import { Menu, X, Mail, Phone, Facebook, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Menu, X, Mail, Phone, Facebook, Twitter, Instagram, Linkedin, ArrowRight, LogOut } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState(null);
     const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            localStorage.removeItem('token');
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    };
 
     const isActive = (path) => {
         return location.pathname === path ? "text-[#F15A29]" : "text-[#1B2A41] hover:text-[#F15A29]";
@@ -63,13 +84,25 @@ const Header = () => {
 
                         {/* Action Buttons */}
                         <div className="hidden md:flex items-center space-x-6">
-                            <Link to="/login" className="group relative bg-[#00D2AA] hover:bg-teal-500 text-white px-8 py-2 rounded-full font-medium flex items-center justify-center text-sm shadow-md transition-all">
-                                <ArrowRight size={16} className="absolute left-4 transition-all duration-300 ease-in-out group-hover:left-[calc(100%-20px)] group-active:left-[calc(100%-20px)]" />
-                                <span>Login</span>
-                            </Link>
-                            <Link to="/register" className="text-[#F15A29] font-bold text-sm hover:underline">
-                                Register
-                            </Link>
+                            {user ? (
+                                <button
+                                    onClick={handleLogout}
+                                    className="group relative bg-[#F15A29] hover:bg-orange-600 text-white px-8 py-2 rounded-full font-medium flex items-center justify-center text-sm shadow-md transition-all gap-2"
+                                >
+                                    <LogOut size={16} />
+                                    <span>Logout</span>
+                                </button>
+                            ) : (
+                                <>
+                                    <Link to="/login" className="group relative bg-[#00D2AA] hover:bg-teal-500 text-white px-8 py-2 rounded-full font-medium flex items-center justify-center text-sm shadow-md transition-all">
+                                        <ArrowRight size={16} className="absolute left-4 transition-all duration-300 ease-in-out group-hover:left-[calc(100%-20px)] group-active:left-[calc(100%-20px)]" />
+                                        <span>Login</span>
+                                    </Link>
+                                    <Link to="/register" className="text-[#F15A29] font-bold text-sm hover:underline">
+                                        Register
+                                    </Link>
+                                </>
+                            )}
                         </div>
 
                         {/* Mobile Menu Button */}
@@ -94,12 +127,24 @@ const Header = () => {
                             <Link to="/community" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/community' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>Community</Link>
                             <Link to="/cdls" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/cdls' ? 'text-[#F15A29] bg-orange-50' : 'text-gray-700 hover:text-primary hover:bg-gray-50'}`}>CDLS</Link>
                             <div className="px-3 py-2 flex flex-col space-y-3 mt-4 border-t pt-4">
-                                <Link to="/login" className="block w-full text-center bg-[#00D2AA] text-white px-5 py-2 rounded-full font-medium">
-                                    Login
-                                </Link>
-                                <Link to="/register" className="block w-full text-center text-[#F15A29] font-bold">
-                                    Register
-                                </Link>
+                                {user ? (
+                                    <button
+                                        onClick={handleLogout}
+                                        className="block w-full text-center bg-[#F15A29] hover:bg-orange-600 text-white px-5 py-2 rounded-full font-medium flex items-center justify-center gap-2"
+                                    >
+                                        <LogOut size={16} />
+                                        <span>Logout</span>
+                                    </button>
+                                ) : (
+                                    <>
+                                        <Link to="/login" className="block w-full text-center bg-[#00D2AA] text-white px-5 py-2 rounded-full font-medium">
+                                            Login
+                                        </Link>
+                                        <Link to="/register" className="block w-full text-center text-[#F15A29] font-bold">
+                                            Register
+                                        </Link>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

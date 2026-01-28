@@ -1,9 +1,38 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import InterestedIndividualForm from '../../Members/components/InterestedIndividualForm';
 
 const Volunteer = () => {
     const [showForm, setShowForm] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Check for redirect action
+    React.useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const action = params.get('action');
+
+        if (action === 'volunteer_join') {
+            const token = localStorage.getItem('token');
+            if (token) {
+                setShowForm(true);
+                // Clean up URL (optional, but good for UX)
+                navigate('/', { replace: true });
+            }
+        }
+    }, [location.search, navigate]);
+
+    const handleJoinClick = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login', {
+                state: { from: `/?action=volunteer_join` }
+            });
+        } else {
+            setShowForm(true);
+        }
+    };
 
     return (
         <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
@@ -68,7 +97,7 @@ const Volunteer = () => {
 
                         <div className="relative inline-block">
                             <button
-                                onClick={() => setShowForm(true)}
+                                onClick={handleJoinClick}
                                 className="bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-xl flex items-center group"
                             >
                                 Join Our Team

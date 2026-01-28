@@ -8,6 +8,7 @@ import CDLSPage from './Pages/CDLSPage';
 import Register from './components/Register';
 import Login from './components/Login';
 import ScrollToTop from './components/ScrollToTop';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 import AdminLogin from './Pages/Admin/AdminLogin';
 import AdminLayout from './Pages/Admin/AdminLayout';
@@ -22,6 +23,7 @@ function App() {
     return (
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ScrollToTop />
+            <ScrollToTopButton />
             <div className="min-h-screen bg-white font-sans">
                 <Routes>
                     {/* Public Routes */}

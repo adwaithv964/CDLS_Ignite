@@ -17,14 +17,14 @@ const AdminLayout = () => {
     const location = useLocation();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('adminToken'); // Changed to adminToken
         if (!token) {
             navigate('/admin/login');
         }
     }, [navigate]);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('adminToken'); // Changed to adminToken
         navigate('/admin/login');
     };
 

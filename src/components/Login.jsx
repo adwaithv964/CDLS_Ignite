@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, ArrowRight, X } from 'lucide-react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
@@ -9,6 +9,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +20,13 @@ const Login = () => {
             // Optionally store token if needed for other parts of app, though Firebase handles auth state.
             const token = await user.getIdToken();
             localStorage.setItem('token', token); // Keep this if other components rely on it, but ideally migrate to auth.currentUser or onAuthStateChanged
-            navigate('/');
+
+            // Check for redirect path in location state
+            if (location.state && location.state.from) {
+                navigate(location.state.from, { replace: true });
+            } else {
+                navigate('/');
+            }
         } catch (err) {
             setError('Login failed. Please check your credentials.');
             console.error(err);
