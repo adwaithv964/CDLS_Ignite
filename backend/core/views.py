@@ -221,3 +221,92 @@ def subscriber_delete_mongo(request, object_id):
         return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def dashboard_stats_mongo(request):
+    """
+    Optimized endpoint that returns all dashboard statistics in a single API call.
+    This reduces the number of requests from 4 to 1, improving performance 
+    especially for cold-start scenarios with free-tier hosting.
+    """
+    db = get_db()
+    if db is None:
+        return Response({"error": "Database connection failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    try:
+        # Fetch all data in parallel using MongoDB
+        events = list(db.community_events.find().sort('created_at', -1))
+        interests = list(db.interests.find().sort('created_at', -1))
+        inquiries = list(db.inquiries.find().sort('created_at', -1))
+        subscribers = list(db.subscribers.find().sort('created_at', -1))
+        
+        # Calculate stats
+        total_events = len(events)
+        active_members = len([i for i in interests if i.get('category') in ['coworker', 'startup']])
+        pending_requests = len(inquiries)
+        total_subscribers = len(subscribers)
+        
+        # Prepare recent activity (top 10 most recent across all categories)
+        activities = []
+        
+        # Add events
+        for event in events:
+            activities.append({
+                '_id': str(event['_id']),
+                'type': 'Event Request',
+                'description': f"New event request: \"{event.get('event_title', 'N/A')}\" by {event.get('name', 'Unknown')}",
+                'created_at': event.get('created_at').isoformat() if event.get('created_at') else None,
+                'color': 'text-blue-500'
+            })
+        
+        # Add interests
+        for interest in interests:
+            activities.append({
+                '_id': str(interest['_id']),
+                'type': 'Interest',
+                'description': f"New {interest.get('category', 'unknown')} interest from {interest.get('name', 'Unknown')}",
+                'created_at': interest.get('created_at').isoformat() if interest.get('created_at') else None,
+                'color': 'text-green-500'
+            })
+        
+        # Add inquiries
+        for inquiry in inquiries:
+            message_preview = inquiry.get('message', '')[:30] + '...' if len(inquiry.get('message', '')) > 30 else inquiry.get('message', 'N/A')
+            activities.append({
+                '_id': str(inquiry['_id']),
+                'type': 'Inquiry',
+                'description': f"New inquiry from {inquiry.get('name', 'Unknown')}: \"{message_preview}\"",
+                'created_at': inquiry.get('created_at').isoformat() if inquiry.get('created_at') else None,
+                'color': 'text-orange-500'
+            })
+        
+        # Add subscribers
+        for subscriber in subscribers:
+            activities.append({
+                '_id': str(subscriber['_id']),
+                'type': 'Subscriber',
+                'description': f"New subscriber: {subscriber.get('email', 'Unknown')}",
+                'created_at': subscriber.get('created_at').isoformat() if subscriber.get('created_at') else None,
+                'color': 'text-purple-500'
+            })
+        
+        # Sort by created_at descending and take top 10
+        activities.sort(key=lambda x: x['created_at'] or '', reverse=True)
+        recent_activity = activities[:10]
+        
+        # Return aggregated response
+        return Response({
+            'stats': {
+                'total_events': total_events,
+                'active_members': active_members,
+                'pending_requests': pending_requests,
+                'subscribers': total_subscribers
+            },
+            'recent_activity': recent_activity
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

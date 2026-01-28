@@ -4,7 +4,8 @@ from .views import (
     ContactListView, SubscriberCreateView, SubscriberListView,
     contact_create_mongo, contact_list_mongo, contact_delete_mongo,
     interest_create_mongo, interest_list_mongo, interest_delete_mongo,
-    subscriber_create_mongo, subscriber_list_mongo, subscriber_delete_mongo
+    subscriber_create_mongo, subscriber_list_mongo, subscriber_delete_mongo,
+    dashboard_stats_mongo
 )
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     path('contact/delete/<str:object_id>/', contact_delete_mongo, name='contact-delete-mongo'),
     path('interest/delete/<str:object_id>/', interest_delete_mongo, name='interest-delete-mongo'),
     path('subscribe/delete/<str:object_id>/', subscriber_delete_mongo, name='subscriber-delete-mongo'),
+    path('dashboard/stats/', dashboard_stats_mongo, name='dashboard-stats-mongo'),
 ]

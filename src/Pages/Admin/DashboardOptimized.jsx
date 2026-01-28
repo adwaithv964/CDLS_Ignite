@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api/axios';
 
-const Dashboard = () => {
+const DashboardOptimized = () => {
     const [stats, setStats] = useState([
         { label: 'Total Events', value: '...', color: 'bg-blue-500' },
         { label: 'Active Members', value: '...', color: 'bg-green-500' },
@@ -13,7 +13,7 @@ const Dashboard = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchStatsWithRetry = async (retryCount = 0) => {
+        const fetchDashboardData = async (retryCount = 0) => {
             const maxRetries = 3;
             const baseDelay = 2000; // 2 seconds
 
@@ -25,84 +25,29 @@ const Dashboard = () => {
                     setError(`Waking up backend server... (Attempt ${retryCount + 1}/${maxRetries + 1})`);
                 }
 
-                // Create custom axios instance with longer timeout for dashboard
-                const dashboardApi = api.create ? api : require('axios').default;
-                const customApi = dashboardApi.create ? dashboardApi : api;
+                // Single optimized API call with extended timeout
+                const response = await api.get('/core/dashboard/stats/', {
+                    timeout: 90000 // 90 seconds for cold starts
+                });
 
-                // Fetch counts from list endpoints with extended timeout
-                const [eventsRes, interestsRes, inquiriesRes, subscribersRes] = await Promise.all([
-                    customApi.get('/events/host/list/', { timeout: 90000 }), // 90 seconds
-                    customApi.get('/core/interest/list/', { timeout: 90000 }),
-                    customApi.get('/core/contact/list/', { timeout: 90000 }),
-                    customApi.get('/core/subscribers/list/', { timeout: 90000 })
-                ]);
+                const { stats: statsData, recent_activity } = response.data;
 
-                // Calculate counts
-                const totalEvents = eventsRes.data.length;
-                const activeMembers = interestsRes.data.filter(i => i.category === 'coworker' || i.category === 'startup').length;
-                const pendingRequests = inquiriesRes.data.length;
-                const subscribers = subscribersRes.data.length;
-
+                // Update stats cards
                 setStats([
-                    { label: 'Event Requests', value: totalEvents, color: 'bg-blue-500' },
-                    { label: 'Interested Members', value: activeMembers, color: 'bg-green-500' },
-                    { label: 'Contact Inquiries', value: pendingRequests, color: 'bg-orange-500' },
-                    { label: 'Subscribers', value: subscribers, color: 'bg-purple-500' },
+                    { label: 'Event Requests', value: statsData.total_events, color: 'bg-blue-500' },
+                    { label: 'Interested Members', value: statsData.active_members, color: 'bg-green-500' },
+                    { label: 'Contact Inquiries', value: statsData.pending_requests, color: 'bg-orange-500' },
+                    { label: 'Subscribers', value: statsData.subscribers, color: 'bg-purple-500' },
                 ]);
 
-                // Normalize and Aggregate Recent Activity
-                const activities = [];
-                const getDate = (dateStr) => new Date(dateStr);
+                // Process recent activity
+                const activities = recent_activity.map(activity => ({
+                    ...activity,
+                    date: new Date(activity.created_at)
+                }));
 
-                // 1. Host Events
-                eventsRes.data.forEach(item => {
-                    activities.push({
-                        id: item._id,
-                        type: 'Event Request',
-                        description: `New event request: "${item.event_title}" by ${item.name}`,
-                        date: getDate(item.created_at),
-                        color: 'text-blue-500'
-                    });
-                });
-
-                // 2. Interests
-                interestsRes.data.forEach(item => {
-                    activities.push({
-                        id: item._id,
-                        type: 'Interest',
-                        description: `New ${item.category} interest from ${item.name}`,
-                        date: getDate(item.created_at),
-                        color: 'text-green-500'
-                    });
-                });
-
-                // 3. Inquiries
-                inquiriesRes.data.forEach(item => {
-                    activities.push({
-                        id: item._id,
-                        type: 'Inquiry',
-                        description: `New inquiry from ${item.name}: "${item.message.substring(0, 30)}..."`,
-                        date: getDate(item.created_at),
-                        color: 'text-orange-500'
-                    });
-                });
-
-                // 4. Subscribers
-                subscribersRes.data.forEach(item => {
-                    activities.push({
-                        id: item._id,
-                        type: 'Subscriber',
-                        description: `New subscriber: ${item.email}`,
-                        date: getDate(item.created_at),
-                        color: 'text-purple-500'
-                    });
-                });
-
-                activities.sort((a, b) => b.date - a.date);
-                setRecentActivity(activities.slice(0, 10));
-
-                // Clear any error messages on success
-                setError(null);
+                setRecentActivity(activities);
+                setError(null); // Clear any error messages on success
 
             } catch (err) {
                 console.error("Error fetching dashboard stats:", err);
@@ -116,7 +61,7 @@ const Dashboard = () => {
                     setError(`Backend is waking up (free tier hosting)... Retrying in ${delay / 1000}s...`);
 
                     setTimeout(() => {
-                        fetchStatsWithRetry(retryCount + 1);
+                        fetchDashboardData(retryCount + 1);
                     }, delay);
                 } else {
                     // Final error - no more retries
@@ -126,7 +71,7 @@ const Dashboard = () => {
                             "Please wait a moment and refresh the page, or contact support if the issue persists."
                         );
                     } else {
-                        setError(err.response?.data?.detail || err.message || "Failed to load dashboard data");
+                        setError(err.response?.data?.error || err.message || "Failed to load dashboard data");
                     }
                     setLoading(false);
                 }
@@ -137,7 +82,7 @@ const Dashboard = () => {
             }
         };
 
-        fetchStatsWithRetry();
+        fetchDashboardData();
     }, []);
 
     return (
@@ -175,13 +120,15 @@ const Dashboard = () => {
                 ) : (
                     <div className="space-y-4">
                         {recentActivity.map((activity) => (
-                            <div key={activity.id} className="flex items-start border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                            <div key={activity._id} className="flex items-start border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                                 <div className={`mr-4 mt-1 font-bold text-sm ${activity.color} uppercase w-32 flex-shrink-0`}>
                                     {activity.type}
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-gray-800">{activity.description}</p>
-                                    <span className="text-xs text-gray-400">{activity.date.toLocaleString()}</span>
+                                    <span className="text-xs text-gray-400">
+                                        {activity.date ? activity.date.toLocaleString() : 'N/A'}
+                                    </span>
                                 </div>
                             </div>
                         ))}
@@ -192,4 +139,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default DashboardOptimized;
