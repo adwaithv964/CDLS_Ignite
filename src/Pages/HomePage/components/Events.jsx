@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight, Ticket } from 'lucide-react';
 const starGreen = "/assets/star_green.png";
+const commEvent1 = "/assets/comm_event_1.png";
+const commEvent2 = "/assets/comm_event_2.jpeg";
 import HostEventForm from '../../EventsPage/components/HostEventForm';
 
 const Events = () => {
@@ -71,7 +73,7 @@ const Events = () => {
                     </div>
 
                     {/* Event visuals section */}
-                    <div className="relative">
+                    <div className="relative h-[400px] lg:h-[500px]">
                         {/* Background pattern */}
                         <div className="absolute -top-12 -left-12 w-32 h-32 opacity-60 z-0">
                             <svg width="100%" height="100%" fill="none">
@@ -83,35 +85,27 @@ const Events = () => {
                         </div>
 
                         {/* Decorative asterisk */}
-                        <div className="absolute -top-10 -right-10 z-20 w-16 h-16 animate-spin-slow">
+                        <div className="absolute top-0 -right-10 z-20 w-16 h-16 animate-spin-slow">
                             <img src={starGreen} alt="" className="w-full" />
                         </div>
 
-                        {/* Image wrapper */}
-                        <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl bg-gray-100 pb-[10%] pr-[5%]">
-                            {/* Event image */}
+                        {/* Image 2 (Large Vertical - Bottom/Right) */}
+                        <div className="absolute top-10 right-0 w-[70%] h-[90%] rounded-lg overflow-hidden shadow-xl z-10">
                             <img
-                                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80"
-                                alt="Students collaborating"
-                                className="w-full h-auto object-cover rounded-tl-3xl rounded-bl-3xl"
-                                style={{
-                                    clipPath: 'polygon(0 0, 100% 0, 100% 85%, 85% 85%, 85% 100%, 0 100%)' // Trying to mimic the cutout shape
-                                }}
+                                src={commEvent2}
+                                alt="Community Event"
+                                className="w-full h-full object-cover"
                             />
-
-                            <div className="absolute inset-0 bg-transparent rounded-3xl pointer-events-none"></div>
                         </div>
 
-                        {/* Decorative border overlay */}
-                        <div className="absolute bottom-10 right-0 w-1/3 h-1/3 z-20 pointer-events-none translate-x-4">
-                            {/* Outline shape */}
-                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-lg rotate-180">
-                                <path d="M10 10 H 90 V 90 H 50 V 60 H 10 V 10" stroke="#ff5722" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                            </svg>
+                        {/* Image 1 (Smaller Square - Top/Left Overlap) */}
+                        <div className="absolute top-0 left-0 w-[50%] h-[50%] rounded-lg overflow-hidden shadow-2xl border-4 border-white z-20">
+                            <img
+                                src={commEvent1}
+                                alt="Students Collaborating"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
-
-
-
                     </div>
                 </div>
             </div>

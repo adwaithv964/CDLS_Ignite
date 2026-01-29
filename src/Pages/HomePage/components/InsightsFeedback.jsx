@@ -1,5 +1,8 @@
 import React from 'react';
-const feedbackGirl = "/assets/feedback_girl.png";
+
+const feedback1 = "/assets/feedback_1.png";
+const feedback2 = "/assets/feedback_2.jpeg";
+const feedback3 = "/assets/feedback_3.png";
 const usmanProfile = "/assets/usman_profile.png";
 const contour = "/assets/contour.png";
 
@@ -20,13 +23,20 @@ const InsightsFeedback = () => {
                     <div className="flex flex-col lg:flex-row items-center">
 
                         {/* Image section */}
-                        <div className="w-full lg:w-1/2 relative z-0">
-                            <div className="relative h-[400px] lg:h-[600px] w-full overflow-hidden">
-                                <img
-                                    src={feedbackGirl}
-                                    alt="Student Feedback"
-                                    className="w-full h-full object-cover object-center"
-                                />
+                        <div className="w-full lg:w-1/2 relative z-0 h-[500px] lg:h-[600px]">
+                            {/* Image 3 - Top Right/Background */}
+                            <div className="absolute top-0 right-10 lg:right-20 w-48 h-64 lg:w-64 lg:h-80 shadow-lg border-4 border-white transform rotate-12 z-10 rounded-lg overflow-hidden">
+                                <img src={feedback3} alt="Feedback 3" className="w-full h-full object-cover" />
+                            </div>
+
+                            {/* Image 1 - Top Left/Main */}
+                            <div className="absolute top-10 left-4 lg:left-10 w-56 h-72 lg:w-72 lg:h-96 shadow-xl border-4 border-white transform -rotate-6 z-20 rounded-lg overflow-hidden">
+                                <img src={feedback1} alt="Feedback 1" className="w-full h-full object-cover" />
+                            </div>
+
+                            {/* Image 2 - Bottom/Overlay */}
+                            <div className="absolute bottom-20 left-1/3 w-52 h-60 lg:w-64 lg:h-72 shadow-2xl border-4 border-white transform rotate-3 z-30 rounded-lg overflow-hidden">
+                                <img src={feedback2} alt="Feedback 2" className="w-full h-full object-cover" />
                             </div>
                         </div>
 
