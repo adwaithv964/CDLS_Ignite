@@ -39,7 +39,7 @@ const Header = () => {
                     <div className="flex items-center space-x-6">
                         <div className="flex items-center space-x-1">
                             <Mail size={14} className="text-[#F15A29]" />
-                            <span>info@cdls.in</span>
+                            <span>info@cdlsthamarassery.in</span>
                         </div>
                         <div className="flex items-center space-x-1">
                             <Phone size={14} className="text-[#F15A29]" />
@@ -52,11 +52,11 @@ const Header = () => {
                             <span className="text-gray-600">|</span>
                             <span className="text-[#F15A29]">English</span>
                         </div>
-                        <div className="flex space-x-3 text-white">
+                        <div className="flex space-x-3 text-white items-center">
                             <Facebook size={14} />
-                            <Twitter size={14} />
-                            <Instagram size={14} />
-                            <Linkedin size={14} />
+                            <a href="https://www.instagram.com/cdls.thamarassery?utm_source=qr&igsh=OXVlMWx0bWRqNmVp" target="_blank" rel="noopener noreferrer" className="hover:text-[#F15A29] transition-colors">
+                                <Instagram size={14} />
+                            </a>
                         </div>
                     </div>
                 </div>
