@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 
 const Hero = () => {
     return (
-        <section className="relative bg-gradient-to-r from-[#FFF5F2] to-[#E6F9F6] pt-28 md:pt-16 pb-12 md:pb-20 overflow-hidden">
+        <section className="relative bg-gradient-to-r from-[#FFF5F2] to-[#E6F9F6] pt-40 md:pt-16 pb-12 md:pb-20 overflow-hidden">
 
             {/* Background decorations */}
             <div className="absolute top-1/2 left-[45%] w-2 h-2 bg-[#F15A29] rounded-full opacity-60"></div>
@@ -15,7 +15,7 @@ const Hero = () => {
                 <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
                     {/* Main content area */}
-                    <div className="w-full lg:w-1/2 z-10 order-2 lg:order-1 pt-8 lg:pt-0">
+                    <div className="w-full lg:w-1/2 z-10 lg:order-1 pt-8 lg:pt-0">
                         <div className="inline-block bg-[#D1FAE5] text-[#00D2AA] px-4 py-1.5 rounded-sm font-semibold text-sm mb-4 md:mb-6 shadow-sm">
                             Igniting Digital Futures.
                         </div>
@@ -41,7 +41,7 @@ const Hero = () => {
                     </div>
 
                     {/* Visuals area */}
-                    <div className="w-full lg:w-1/2 relative h-[350px] md:h-[500px] order-1 lg:order-2">
+                    <div className="w-full lg:w-1/2 relative h-[400px] md:h-[500px] lg:order-2">
 
                         {/* Learners statistic badge */}
                         <div className="absolute top-4 md:top-10 left-0 bg-white p-2 md:p-3 pr-4 md:pr-5 rounded-full shadow-lg z-20 flex items-center space-x-2 md:space-x-3 animate-float-delayed transform scale-90 md:scale-100 origin-left">
