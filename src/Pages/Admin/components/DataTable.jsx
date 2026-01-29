@@ -1,30 +1,42 @@
 import React from 'react';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 const DataTable = ({ columns, data, onEdit, onDelete, isLoading }) => {
-    const downloadCSV = () => {
+    const downloadExcel = () => {
         if (!data || data.length === 0) return;
 
-        const headers = columns.map(col => col.label).join(',');
-        const rows = data.map(row => {
-            return columns.map(col => {
-                let cell = col.render ? col.render(row) : row[col.key];
-                // Handle commas or quotes in data
-                cell = cell ? String(cell).replace(/"/g, '""') : '';
-                return `"${cell}"`;
-            }).join(',');
-        }).join('\n');
+        // Prepare data for export
+        const exportData = data.map(row => {
+            const rowData = {};
+            columns.forEach(col => {
+                // Use render function result if available, otherwise raw value
+                // For simplified export, we might prioritize raw values or strings
+                let value = row[col.key];
 
-        const csvContent = `${headers}\n${rows}`;
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', 'data_export.csv');
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+                // Special handling for clean export if render is complex, 
+                // but usually for Excel we want the raw data or a simple string representation.
+                // If col.key is 'phone', ensure it's treated as string to avoid scientific notation
+                if (col.key === 'phone') {
+                    // Ensure it's a string
+                    value = String(value);
+                }
+
+                rowData[col.label] = value;
+            });
+            return rowData;
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+        // precise column width calculation could be improved, but setting a default width helps
+        const colWidths = columns.map(col => ({ wch: 25 }));
+        worksheet['!cols'] = colWidths;
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+
+        XLSX.writeFile(workbook, "data_export.xlsx");
     };
 
     if (isLoading) {
@@ -39,10 +51,11 @@ const DataTable = ({ columns, data, onEdit, onDelete, isLoading }) => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-200 flex justify-end">
                 <button
-                    onClick={downloadCSV}
+                    onClick={downloadExcel}
                     className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-4 rounded shadow transition-colors flex items-center gap-2"
                 >
-                    Download CSV
+                    <Download size={18} />
+                    Download Excel
                 </button>
             </div>
             <div className="overflow-x-auto">

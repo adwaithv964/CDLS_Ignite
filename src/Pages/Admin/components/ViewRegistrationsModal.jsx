@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { X, User, Phone, Mail, Calendar, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import api from '../../../api/axios';
 
 const ViewRegistrationsModal = ({ event, onClose }) => {
@@ -20,30 +21,30 @@ const ViewRegistrationsModal = ({ event, onClose }) => {
         fetchRegistrations();
     }, [event.id]);
 
-    const downloadCSV = () => {
+    const downloadExcel = () => {
         if (!registrations.length) return;
 
-        const headers = ["Name", "Email", "Phone", "Registered At"];
-        const csvRows = [headers.join(",")];
+        const exportData = registrations.map(reg => ({
+            Name: reg.name,
+            Email: reg.email,
+            Phone: String(reg.phone), // Force string to prevent scientific notation
+            "Registered At": new Date(reg.registered_at).toLocaleDateString()
+        }));
 
-        registrations.forEach(reg => {
-            const row = [
-                `"${reg.name}"`,
-                `"${reg.email}"`,
-                `"${reg.phone}"`,
-                `"${new Date(reg.registered_at).toLocaleDateString()}"`
-            ];
-            csvRows.push(row.join(","));
-        });
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
 
-        const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `registrations-${event.title.replace(/\s+/g, '_')}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Set column widths
+        worksheet['!cols'] = [
+            { wch: 30 }, // Name
+            { wch: 35 }, // Email
+            { wch: 20 }, // Phone
+            { wch: 15 }  // Date
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Registrations");
+
+        XLSX.writeFile(workbook, `registrations-${event.title.replace(/\s+/g, '_')}.xlsx`);
     };
 
 
@@ -58,10 +59,10 @@ const ViewRegistrationsModal = ({ event, onClose }) => {
                     <div className="flex items-center gap-2">
                         {registrations.length > 0 && (
                             <button
-                                onClick={downloadCSV}
+                                onClick={downloadExcel}
                                 className="flex items-center gap-1 text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition-colors"
                             >
-                                <Download size={16} /> Download CSV
+                                <Download size={16} /> Download Excel
                             </button>
                         )}
                         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">

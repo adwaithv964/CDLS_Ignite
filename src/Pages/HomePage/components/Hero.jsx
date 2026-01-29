@@ -62,7 +62,7 @@ const Hero = () => {
                             {/* Image wrapper */}
                             <div className="w-full h-full bg-gradient-to-b from-[#E0D4FC] to-[#C4B5FD] flex items-end justify-center">
                                 <img
-                                    src="/assets/image_1.png"
+                                    src="/assets/home_1.png"
                                     alt="Student with books"
                                     className="w-full h-full object-cover"
                                 />
@@ -73,7 +73,7 @@ const Hero = () => {
                         <div className="absolute top-0 right-4 md:right-10 w-48 md:w-64 h-64 md:h-96 bg-blue-100 rounded-full border-4 border-white shadow-2xl overflow-hidden z-0 transition-transform duration-300 hover:-translate-y-2">
                             <div className="w-full h-full bg-[#3B82F6] flex items-end justify-center overflow-hidden">
                                 <img
-                                    src="/assets/image_2.png"
+                                    src="/assets/home_2.png"
                                     alt="Student with backpack"
                                     className="w-full h-full object-cover object-bottom"
                                     style={{ objectPosition: 'center 20%' }}
