@@ -5,8 +5,6 @@ import EventsPage from './Pages/EventsPage';
 import Members from './Pages/Members';
 import Community from './Pages/Community';
 import CDLSPage from './Pages/CDLSPage';
-import Register from './components/Register';
-import Login from './components/Login';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopButton from './components/ScrollToTopButton';
 
@@ -28,8 +26,6 @@ function App() {
                 <Routes>
                     {/* Public Routes */}
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/login" element={<Login />} />
                     <Route path="/events" element={<EventsPage />} />
                     <Route path="/members" element={<Members />} />
                     <Route path="/community" element={<Community />} />

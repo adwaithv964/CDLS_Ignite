@@ -1,38 +1,14 @@
 import React, { useState } from 'react';
 import { MapPin, Mail, Phone, ArrowRight, Wifi, Wind, Zap, Users, MonitorPlay, Clock, Camera, ShieldCheck, Armchair } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import InterestedIndividualForm from './Members/components/InterestedIndividualForm';
 
 const CDLSPage = () => {
     const [showForm, setShowForm] = useState(false);
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    // Check for redirect action
-    React.useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const action = params.get('action');
-
-        if (action === 'cdls_book') {
-            const token = localStorage.getItem('token');
-            if (token) {
-                setShowForm(true);
-                navigate('/cdls', { replace: true });
-            }
-        }
-    }, [location.search, navigate]);
 
     const handleBookClick = () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login', {
-                state: { from: `/cdls?action=cdls_book` }
-            });
-        } else {
-            setShowForm(true);
-        }
+        setShowForm(true);
     };
 
     return (

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import InterestedIndividualForm from '../../Members/components/InterestedIndividualForm';
 
 const mashLogo = "/assets/mash_logo_v2.png";
@@ -13,32 +12,9 @@ const contour = "/assets/contour.png";
 
 const StartupNetwork = () => {
     const [showForm, setShowForm] = useState(false);
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    // Check for redirect action
-    React.useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const action = params.get('action');
-
-        if (action === 'startup_join') {
-            const token = localStorage.getItem('token');
-            if (token) {
-                setShowForm(true);
-                navigate('/', { replace: true });
-            }
-        }
-    }, [location.search, navigate]);
 
     const handleJoinClick = () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login', {
-                state: { from: `/?action=startup_join` }
-            });
-        } else {
-            setShowForm(true);
-        }
+        setShowForm(true);
     };
 
     return (

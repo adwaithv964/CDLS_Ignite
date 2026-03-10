@@ -15,24 +15,8 @@ const EventsPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Check for redirect action
-    React.useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const action = params.get('action');
-        const eventId = params.get('eventId');
+    // No auth-gate redirect needed
 
-        if (action === 'register' && eventId && events.length > 0) {
-            const eventToSelect = events.find(e => e.id.toString() === eventId);
-            if (eventToSelect) {
-                const token = localStorage.getItem('token');
-                if (token) {
-                    setSelectedEvent(mapEvent(eventToSelect));
-                    // Clean up URL
-                    navigate('/events', { replace: true });
-                }
-            }
-        }
-    }, [events, location.search, navigate]);
 
     React.useEffect(() => {
         const fetchEvents = async () => {
@@ -181,14 +165,7 @@ const EventsPage = () => {
                                 {showRegister ? (
                                     <button
                                         onClick={() => {
-                                            const token = localStorage.getItem('token');
-                                            if (!token) {
-                                                navigate('/login', {
-                                                    state: { from: `/events?action=register&eventId=${session.id}` }
-                                                });
-                                            } else {
-                                                setSelectedEvent(session);
-                                            }
+                                            setSelectedEvent(session);
                                         }}
                                         className="bg-[#1B2A41] hover:bg-black text-white px-4 py-2 rounded transition-colors"
                                     >
@@ -232,9 +209,9 @@ const EventsPage = () => {
                         </h1>
                         <p className="text-gray-500 text-sm leading-relaxed max-w-xl mb-12">
                             CDLS events are designed to inspire learning, collaboration, and skill development.
-They include workshops, talks, and interactive sessions led by experienced mentors.
-Learners get opportunities to connect, share ideas, and build a strong learning community.
-Each event focuses on practical knowledge and personal growth through real-world experiences.
+                            They include workshops, talks, and interactive sessions led by experienced mentors.
+                            Learners get opportunities to connect, share ideas, and build a strong learning community.
+                            Each event focuses on practical knowledge and personal growth through real-world experiences.
                         </p>
 
                         {/* Dotted Arrow Decoration */}

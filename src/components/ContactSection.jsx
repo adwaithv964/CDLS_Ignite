@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 const asterisk = "/assets/asterisk.png";
 
 const ContactSection = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -16,12 +13,6 @@ const ContactSection = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login', { state: { from: location.pathname + location.search } });
-            return;
-        }
-
         setStatus('sending');
         try {
             await api.post('/core/contact/', formData);
