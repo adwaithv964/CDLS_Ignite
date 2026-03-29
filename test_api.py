@@ -2,7 +2,7 @@ import urllib.request
 import urllib.error
 import json
 
-url = 'https://cdls-ignite-backend.onrender.com/api/core/interest/list/'
+url = 'http://127.0.0.1:8000/api/core/interest/list/?category=volunteer'
 print("Fetching from", url)
 try:
     req = urllib.request.Request(url)

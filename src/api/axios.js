@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const devBaseUrl = 'http://localhost:8000/api';
+const prodBaseUrl = import.meta.env.VITE_API_URL;
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    baseURL: isLocalhost ? devBaseUrl : prodBaseUrl,
     timeout: 10000, // 10 seconds timeout
     headers: {
         'Content-Type': 'application/json',
@@ -14,6 +18,7 @@ api.interceptors.request.use(
         // Check if it's an admin API call
         const isAdminCall = config.url.includes('/auth/') ||
             config.url.includes('/events/') ||
+            config.url.includes('/members/') ||
             config.url.includes('/core/interest/') ||
             config.url.includes('/core/inquiry/') ||
             config.url.includes('/core/subscribers/') ||

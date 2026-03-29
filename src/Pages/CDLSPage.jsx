@@ -3,9 +3,16 @@ import { MapPin, Mail, Phone, ArrowRight, Wifi, Wind, Zap, Users, MonitorPlay, C
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import InterestedIndividualForm from './Members/components/InterestedIndividualForm';
+import MaintenancePage from '../components/MaintenancePage';
+import { useMaintenanceMode } from '../context/MaintenanceContext';
 
 const CDLSPage = () => {
+    const { isUnderMaintenance, message } = useMaintenanceMode('cdls');
     const [showForm, setShowForm] = useState(false);
+
+    if (isUnderMaintenance) {
+        return <MaintenancePage pageName="CDLS page" message={message} />;
+    }
 
     const handleBookClick = () => {
         setShowForm(true);

@@ -4,16 +4,23 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import api from '../../api/axios';
+import MaintenancePage from '../../components/MaintenancePage';
+import { useMaintenanceMode } from '../../context/MaintenanceContext';
 
 import RegisterEventModal from './components/RegisterEventModal';
 
 const EventsPage = () => {
+    const { isUnderMaintenance, message } = useMaintenanceMode('events');
     const [activeTab, setActiveTab] = useState('upcoming');
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
+
+    if (isUnderMaintenance) {
+        return <MaintenancePage pageName="Events section" message={message} />;
+    }
 
     // No auth-gate redirect needed
 

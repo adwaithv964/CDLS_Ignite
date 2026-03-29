@@ -12,8 +12,14 @@ import {
     Monitor,
     PlayCircle
 } from 'lucide-react';
+import MaintenancePage from '../../components/MaintenancePage';
+import { useMaintenanceMode } from '../../context/MaintenanceContext';
 
 const Community = () => {
+    const { isUnderMaintenance, message } = useMaintenanceMode('community');
+    if (isUnderMaintenance) {
+        return <MaintenancePage pageName="Community section" message={message} />;
+    }
     const categories = [
         {
             id: 1,

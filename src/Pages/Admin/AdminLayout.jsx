@@ -9,7 +9,9 @@ import {
     Briefcase,
     Heart,
     Rocket,
-    Rss
+    Rss,
+    Wrench,
+    UserCheck
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -31,12 +33,14 @@ const AdminLayout = () => {
     const navItems = [
         { path: '/admin/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
         { path: '/admin/events', icon: <Calendar size={20} />, label: 'Events' },
+        { path: '/admin/members', icon: <UserCheck size={20} />, label: 'Members' },
         { path: '/admin/interests/volunteer', icon: <Heart size={20} />, label: 'Volunteers' },
         { path: '/admin/interests/coworker', icon: <Users size={20} />, label: 'Co-workers' },
         { path: '/admin/interests/startup', icon: <Briefcase size={20} />, label: 'Startups' },
         { path: '/admin/community-events', icon: <Rocket size={20} />, label: 'Community Events' },
         { path: '/admin/inquiries', icon: <Mail size={20} />, label: 'Inquiries' },
         { path: '/admin/subscribers', icon: <Rss size={20} />, label: 'Subscribers' },
+        { path: '/admin/maintenance', icon: <Wrench size={20} />, label: 'Maintenance' },
     ];
 
     return (
