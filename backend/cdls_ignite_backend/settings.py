@@ -107,14 +107,17 @@ WSGI_APPLICATION = 'cdls_ignite_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_mongodb_backend',
+        'NAME': 'cdls_ignite',
+        'CLIENT': {
+            'host': os.environ.get('MONGO_URI'),
+        },
     }
 }
 
 # Update database configuration from environment variable (if available)
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -160,7 +163,9 @@ CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
+
+
 
 # Media files
 MEDIA_URL = '/media/'
