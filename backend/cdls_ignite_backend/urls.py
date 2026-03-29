@@ -7,6 +7,7 @@ urlpatterns = [
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/core/', include('core.urls')),
     path('api/events/', include('events.urls')),
+    path('api/members/', include('members.urls')),
 ]
 
 from django.conf import settings
