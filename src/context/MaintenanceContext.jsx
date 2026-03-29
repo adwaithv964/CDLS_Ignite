@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 const DEFAULT_SETTINGS = {
     pages: {
@@ -36,6 +36,16 @@ export function MaintenanceProvider({ children }) {
     const updateSettings = useCallback((newSettings) => {
         setSettings(newSettings);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+    }, []);
+
+    useEffect(() => {
+        const handleStorageChange = (e) => {
+            if (e.key === STORAGE_KEY) {
+                setSettings(loadSettings());
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
     }, []);
 
     const togglePage = useCallback((pageKey) => {
