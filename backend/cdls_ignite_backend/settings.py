@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-import dj_database_url
+from dotenv import load_dotenv  # type: ignore
+import dj_database_url  # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,6 +35,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-2+6qkvg!gd^tr9yi5wq39
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else ['*']
+
+# Ensure absolute URIs are constructed with 'https' behind reverse proxies (like Render)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 MONGO_URI = os.environ.get('MONGO_URI')
 
