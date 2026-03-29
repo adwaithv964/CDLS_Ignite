@@ -4,8 +4,8 @@ services:
     runtime: python
     region: singapore
     plan: free
-    buildCommand: "cd backend && chmod a+x build.sh && ./build.sh"
-    startCommand: "cd backend && gunicorn cdls_ignite_backend.wsgi:application"
+    buildCommand: "chmod a+x build.sh && ./build.sh"
+    startCommand: "gunicorn backend.cdls_ignite_backend.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
