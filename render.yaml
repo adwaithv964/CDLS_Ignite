@@ -4,11 +4,11 @@ services:
     runtime: python
     region: singapore
     plan: free
-    buildCommand: "./backend/build.sh"
+    buildCommand: "cd backend && chmod a+x build.sh && ./build.sh"
     startCommand: "cd backend && gunicorn cdls_ignite_backend.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.0
+        value: 3.10.0
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
