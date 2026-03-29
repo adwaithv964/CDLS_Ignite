@@ -109,9 +109,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django_mongodb_backend',
         'NAME': 'cdls_ignite',
-        'CLIENT': {
-            'host': os.environ.get('MONGO_URI'),
-        },
+        'HOST': os.environ.get('MONGO_URI'),
     }
 }
 
