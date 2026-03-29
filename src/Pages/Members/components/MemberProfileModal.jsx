@@ -65,12 +65,7 @@ const MemberProfileModal = ({ member, onClose }) => {
 
                     {/* Contact Info */}
                     <div className="w-full space-y-3 text-sm text-gray-600">
-                        {member.phone && (
-                            <div className="flex items-center gap-2">
-                                <Phone size={14} className="text-purple-500 flex-shrink-0" />
-                                <span>{member.phone}</span>
-                            </div>
-                        )}
+
                         {member.location && (
                             <div className="flex items-center gap-2">
                                 <MapPin size={14} className="text-purple-500 flex-shrink-0" />
