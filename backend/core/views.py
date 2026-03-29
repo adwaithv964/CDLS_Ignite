@@ -1,6 +1,6 @@
-from rest_framework import generics, permissions
-from .models import ContactMessage, InterestExpression, Subscriber
-from .serializers import ContactMessageSerializer, InterestExpressionSerializer, SubscriberSerializer
+from rest_framework import generics, permissions  # type: ignore
+from .models import ContactMessage, InterestExpression, Subscriber  # type: ignore
+from .serializers import ContactMessageSerializer, InterestExpressionSerializer, SubscriberSerializer  # type: ignore
 
 class ContactCreateView(generics.CreateAPIView):
     queryset = ContactMessage.objects.all()
@@ -34,13 +34,13 @@ class SubscriberListView(generics.ListAPIView):
     permission_classes = [permissions.IsAdminUser]
 
 # MongoDB Views
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.response import Response
-from rest_framework import status
-from cdls_ignite_backend.mongo_db import get_db
+from rest_framework.decorators import api_view, permission_classes, authentication_classes  # type: ignore
+from rest_framework.response import Response  # type: ignore
+from rest_framework import status  # type: ignore
+from cdls_ignite_backend.mongo_db import get_db  # type: ignore
 import datetime
-from django.views.decorators.csrf import csrf_exempt
-from bson import ObjectId
+from django.views.decorators.csrf import csrf_exempt  # type: ignore
+from bson import ObjectId  # type: ignore
 
 @csrf_exempt
 @api_view(['DELETE'])
@@ -294,7 +294,7 @@ def dashboard_stats_mongo(request):
         
         # Sort by created_at descending and take top 10
         activities.sort(key=lambda x: x['created_at'] or '', reverse=True)
-        recent_activity = activities[:10]
+        recent_activity = activities[:10]  # type: ignore
         
         # Return aggregated response
         return Response({
@@ -309,4 +309,43 @@ def dashboard_stats_mongo(request):
         
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+import json
+import os
+from django.conf import settings  # type: ignore
+
+MAINTENANCE_FILE = os.path.join(settings.BASE_DIR, 'maintenance.json')
+
+@csrf_exempt
+@api_view(['GET', 'POST', 'OPTIONS'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def maintenance_settings_mongo(request):
+    # Using local JSON storage to guarantee 100% uptime for maintenance controls,
+    # completely bypassing potential MongoDB connection/timeout issues.
+    if request.method == 'GET':
+        try:
+            if os.path.exists(MAINTENANCE_FILE):
+                with open(MAINTENANCE_FILE, 'r') as f:
+                    data = json.load(f)
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    "pages": {"home": False, "events": False, "members": False, "community": False, "cdls": False},
+                    "message": "We're currently upgrading this section to serve you better. We'll be back soon!"
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+    elif request.method == 'POST':
+        try:
+            data = request.data
+            with open(MAINTENANCE_FILE, 'w') as f:
+                json.dump({
+                    "pages": data.get("pages", {}), 
+                    "message": data.get("message", "We're currently upgrading this section to serve you better. We'll be back soon!")
+                }, f)
+            return Response({"message": "Maintenance settings updated"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

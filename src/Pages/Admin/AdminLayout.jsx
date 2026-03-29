@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard,
@@ -11,22 +11,51 @@ import {
     Rocket,
     Rss,
     Wrench,
-    UserCheck
+    UserCheck,
+    Bell
 } from 'lucide-react';
+import api from '../../api/axios';
 
 const AdminLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    const checkUnread = async () => {
+        try {
+            const res = await api.get('/core/contact/list/');
+            const lastViewed = localStorage.getItem('lastViewedInquiries');
+            if (!lastViewed) {
+                setUnreadCount(res.data.length);
+            } else {
+                const count = res.data.filter(item => new Date(item.created_at) > new Date(lastViewed)).length;
+                setUnreadCount(count);
+            }
+        } catch (error) {
+            console.error('Failed to fetch notifications:', error);
+        }
+    };
 
     useEffect(() => {
-        const token = localStorage.getItem('adminToken'); // Changed to adminToken
+        const token = localStorage.getItem('adminToken');
         if (!token) {
             navigate('/admin/login');
+        } else {
+            checkUnread();
+            const interval = setInterval(checkUnread, 30000); // Check every 30s
+            return () => clearInterval(interval);
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (location.pathname === '/admin/inquiries') {
+            localStorage.setItem('lastViewedInquiries', new Date().toISOString());
+            setUnreadCount(0);
+        }
+    }, [location.pathname]);
+
     const handleLogout = () => {
-        localStorage.removeItem('adminToken'); // Changed to adminToken
+        localStorage.removeItem('adminToken');
         navigate('/admin/login');
     };
 
@@ -82,8 +111,20 @@ const AdminLayout = () => {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-auto">
-                <div className="p-8">
+            <main className="flex-1 overflow-auto flex flex-col relative">
+                {/* Header for Notifications */}
+                <div className="flex justify-end items-center px-8 py-4 bg-transparent">
+                    <Link to="/admin/inquiries" className="relative p-2 text-gray-500 hover:text-gray-800 transition-colors" title="Notifications">
+                        <Bell size={24} />
+                        {unreadCount > 0 && (
+                            <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-red-500 rounded-full border-2 border-gray-100">
+                                {unreadCount > 99 ? '99+' : unreadCount}
+                            </span>
+                        )}
+                    </Link>
+                </div>
+
+                <div className="px-8 pb-8 flex-1">
                     <Outlet />
                 </div>
             </main>

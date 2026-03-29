@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
+import api from '../../../api/axios';
 
 const MemberProfileModal = ({ member, onClose }) => {
+    const [showContactForm, setShowContactForm] = useState(false);
+    const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
+    const [status, setStatus] = useState('');
+
     if (!member) return null;
 
     const tags = member.tags
@@ -82,66 +87,157 @@ const MemberProfileModal = ({ member, onClose }) => {
 
                     {/* Contact Button */}
                     {member.email && (
-                        <a
-                            href={`mailto:${member.email}`}
+                        <button
+                            onClick={() => setShowContactForm(true)}
                             className="mt-6 flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-6 py-3 rounded-full transition-all shadow-md w-full justify-center"
                         >
                             Contact <ArrowRight size={16} />
-                        </a>
+                        </button>
                     )}
                 </div>
 
-                {/* Right Panel — white */}
-                <div className="flex-1 p-8 overflow-y-auto">
-                    {/* Name */}
-                    <h2 className="text-2xl font-extrabold text-[#1B2A41] uppercase tracking-wide mb-1">
-                        {member.name}
-                    </h2>
+                {/* Right Panel */}
+                <div className={`flex-1 p-8 overflow-y-auto ${showContactForm ? 'bg-[#F7F8FA]' : 'bg-white'}`}>
+                    {!showContactForm ? (
+                        <>
+                            {/* Name */}
+                            <h2 className="text-2xl font-extrabold text-[#1B2A41] uppercase tracking-wide mb-1">
+                                {member.name}
+                            </h2>
 
-                    {/* Institution */}
-                    {member.institution && (
-                        <div className="mb-6">
-                            <p className="text-xs font-bold text-[#F15A29] uppercase tracking-widest mb-1">
-                                Entity / Institution Name
-                            </p>
-                            <p className="text-gray-700 text-sm border border-gray-200 rounded px-3 py-2 bg-gray-50">
-                                {member.institution}
-                            </p>
-                        </div>
-                    )}
+                            {/* Institution */}
+                            {member.institution && (
+                                <div className="mb-6">
+                                    <p className="text-xs font-bold text-[#F15A29] uppercase tracking-widest mb-1">
+                                        Entity / Institution Name
+                                    </p>
+                                    <p className="text-gray-700 text-sm border border-gray-200 rounded px-3 py-2 bg-gray-50">
+                                        {member.institution}
+                                    </p>
+                                </div>
+                            )}
 
-                    {/* Profile Details */}
-                    {member.profile_details && (
-                        <div className="mb-6">
-                            <h3 className="text-lg font-bold text-[#1B2A41] mb-2">Profile</h3>
-                            <p className="text-gray-600 text-sm leading-relaxed">
-                                {member.profile_details}
-                            </p>
-                        </div>
-                    )}
+                            {/* Profile Details */}
+                            {member.profile_details && (
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-bold text-[#1B2A41] mb-2">Profile</h3>
+                                    <p className="text-gray-600 text-sm leading-relaxed">
+                                        {member.profile_details}
+                                    </p>
+                                </div>
+                            )}
 
-                    {/* Expertise & Skills */}
-                    {skills.length > 0 && (
-                        <div>
-                            <h3 className="text-base font-extrabold text-[#1B2A41] uppercase tracking-wide mb-3">
-                                Expertise &amp; Skills:
-                            </h3>
-                            <div className="space-y-3">
-                                {skills.map((skill, idx) => (
-                                    <div key={idx}>
-                                        <p className="text-sm font-semibold text-gray-700 mb-1">{skill}</p>
-                                        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full rounded-full"
-                                                style={{
-                                                    width: `${75 + (idx % 3) * 8}%`,
-                                                    backgroundColor: '#00A99D',
-                                                }}
-                                            />
-                                        </div>
+                            {/* Expertise & Skills */}
+                            {skills.length > 0 && (
+                                <div>
+                                    <h3 className="text-base font-extrabold text-[#1B2A41] uppercase tracking-wide mb-3">
+                                        Expertise &amp; Skills:
+                                    </h3>
+                                    <div className="flex flex-col gap-3">
+                                        {skills.map((skill, idx) => (
+                                            <React.Fragment key={idx}>
+                                                <p className="text-sm font-semibold text-gray-700">{skill}</p>
+                                                {idx < skills.length - 1 && (
+                                                    <div className="w-full h-1.5 bg-gray-200 rounded-full" />
+                                                )}
+                                            </React.Fragment>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="h-full flex flex-col">
+                            <h2 className="text-xl font-extrabold text-[#1B2A41] uppercase tracking-wide mb-1">
+                                CONTACT REQUEST
+                            </h2>
+                            <p className="text-xs font-semibold text-gray-600 mb-8">
+                                Enter Your Details To Get Contact Information
+                            </p>
+
+                            {status === 'success' ? (
+                                <div className="bg-green-50 text-green-600 p-4 rounded-lg border border-green-200 font-medium">
+                                    Your request has been submitted. Our team will contact you soon.
+                                </div>
+                            ) : (
+                                <form 
+                                    className="flex-1 flex flex-col space-y-5"
+                                    onSubmit={async (e) => {
+                                        e.preventDefault();
+                                        setStatus('sending');
+                                        try {
+                                            await api.post('/core/contact/', {
+                                                name: formData.name,
+                                                email: formData.email,
+                                                message: `Contact Request for Member: ${member.name}\nMember Email: ${member.email}\nRequester Mobile: ${formData.phone}`
+                                            });
+                                            setStatus('success');
+                                            setTimeout(() => {
+                                                setShowContactForm(false);
+                                                setStatus('');
+                                                setFormData({ name: '', phone: '', email: '' });
+                                            }, 4000);
+                                        } catch (error) {
+                                            console.error(error);
+                                            setStatus('error');
+                                        }
+                                    }}
+                                >
+                                    {status === 'error' && (
+                                        <div className="text-red-500 text-sm">Failed to submit request. Please try again.</div>
+                                    )}
+                                    
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#1B2A41] mb-2">Your Name *</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={formData.name}
+                                            onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                            className="w-full border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#1B2A41] mb-2">Mobile Number *</label>
+                                        <input
+                                            type="tel"
+                                            required
+                                            value={formData.phone}
+                                            onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                            className="w-full border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-[#1B2A41] mb-2">Email ID *</label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                            className="w-full border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                        />
+                                    </div>
+
+                                    <div className="mt-8 pt-4 flex justify-end gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowContactForm(false)}
+                                            className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold transition"
+                                        >
+                                            CANCEL
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={status === 'sending'}
+                                            className="px-8 py-3 bg-[#7b61ff] hover:bg-[#6a50eb] text-white text-sm font-semibold transition disabled:opacity-70"
+                                        >
+                                            {status === 'sending' ? 'SUBMITTING...' : 'SUBMIT'}
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
                         </div>
                     )}
                 </div>

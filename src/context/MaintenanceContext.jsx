@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import api from '../api/axios';
 
 const DEFAULT_SETTINGS = {
     pages: {
@@ -33,6 +34,22 @@ const MaintenanceContext = createContext(null);
 export function MaintenanceProvider({ children }) {
     const [settings, setSettings] = useState(loadSettings);
 
+    // Fetch global maintenance settings from backend
+    useEffect(() => {
+        api.get('/core/maintenance/')
+            .then(res => {
+                if (res.data && res.data.pages) {
+                    const newSettings = {
+                        pages: { ...DEFAULT_SETTINGS.pages, ...res.data.pages },
+                        message: res.data.message || DEFAULT_SETTINGS.message,
+                    };
+                    setSettings(newSettings);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+                }
+            })
+            .catch(err => console.error("Failed to fetch maintenance settings:", err));
+    }, []);
+
     const updateSettings = useCallback((newSettings) => {
         setSettings(newSettings);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
@@ -55,6 +72,11 @@ export function MaintenanceProvider({ children }) {
                 pages: { ...prev.pages, [pageKey]: !prev.pages[pageKey] },
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+            
+            // Persist to backend
+            api.post('/core/maintenance/', { pages: next.pages, message: next.message })
+                .catch(err => console.error("Failed to update maintenance settings:", err));
+                
             return next;
         });
     }, []);
@@ -63,6 +85,11 @@ export function MaintenanceProvider({ children }) {
         setSettings(prev => {
             const next = { ...prev, message };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+            
+            // Persist to backend
+            api.post('/core/maintenance/', { pages: next.pages, message: next.message })
+                .catch(err => console.error("Failed to update maintenance message:", err));
+                
             return next;
         });
     }, []);
