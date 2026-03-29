@@ -15,6 +15,7 @@ const EventsPage = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -76,6 +77,31 @@ const EventsPage = () => {
 
     const upcomingSessions = events.filter(e => isTodayOrFuture(e.date)).map(mapEvent);
     const earlierSessions = events.filter(e => !isTodayOrFuture(e.date)).map(mapEvent);
+    
+    // Auto-slide effect for hero
+    React.useEffect(() => {
+        if (upcomingSessions.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentSlideIndex(prev => (prev + 1) % upcomingSessions.length);
+            }, 5000);
+            return () => clearInterval(interval);
+        } else {
+            setCurrentSlideIndex(0);
+        }
+    }, [upcomingSessions.length]);
+
+    // Current hero data
+    const DEFAULT_HERO_IMAGE = "/assets/cdls_img_1.jpeg";
+    
+    // Safely get the hero event or fallback
+    const heroEvent = upcomingSessions.length > 0 
+        ? upcomingSessions[currentSlideIndex] || upcomingSessions[0]
+        : {
+            image: DEFAULT_HERO_IMAGE,
+            type: 'General',
+            registrations: 0,
+            title: 'No upcoming events currently scheduled'
+          };
 
 
     const renderCard = (session, isEarlier = false) => (
@@ -244,27 +270,57 @@ const EventsPage = () => {
                     {/* Right Column Image & Cards */}
                     <div className="lg:w-1/2 relative z-10 flex justify-end w-full">
                         <div className="relative w-full max-w-[600px]">
-                            {/* Beginners Badge */}
-                            <div className="absolute -top-5 left-0 z-30 transform -translate-x-4">
-                                <span className="bg-[#8B5CF6] text-white text-sm font-medium px-8 py-3 rounded-md shadow-lg">
-                                    Beginners
+                            {/* Badge */}
+                            <div className="absolute -top-5 left-0 z-30 transform -translate-x-4 transition-all duration-500">
+                                <span className={`${heroEvent.typeColor ? heroEvent.typeColor : 'bg-[#8B5CF6]'} text-white text-sm font-medium px-8 py-3 rounded-md shadow-lg block min-w-[120px] text-center`}>
+                                    {heroEvent.type || 'General'}
                                 </span>
                             </div>
 
-                            {/* Main Image */}
-                            <div className="rounded-tl-[60px] rounded-br-[60px] overflow-hidden shadow-2xl relative z-20 h-[400px] w-full">
-                                <img
-                                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80"
-                                    alt="Students studying together"
-                                    className="w-full h-full object-cover"
-                                />
+                            {/* Main Image Slider */}
+                            <div className="rounded-tl-[60px] rounded-br-[60px] overflow-hidden shadow-2xl relative z-20 h-[400px] w-full bg-gray-100">
+                                {upcomingSessions.length > 0 ? (
+                                    upcomingSessions.map((session, idx) => (
+                                        <img
+                                            key={session.id}
+                                            src={session.image || DEFAULT_HERO_IMAGE}
+                                            alt={session.title}
+                                            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                                                idx === currentSlideIndex ? 'opacity-100' : 'opacity-0'
+                                            }`}
+                                        />
+                                    ))
+                                ) : (
+                                    <img
+                                        src={DEFAULT_HERO_IMAGE}
+                                        alt="Default Event"
+                                        className="w-full h-full object-cover"
+                                    />
+                                )}
                             </div>
+
+                            {/* Slider Navigation Dots */}
+                            {upcomingSessions.length > 1 && (
+                                <div className="absolute bottom-4 left-0 right-0 z-40 flex justify-center gap-2">
+                                    {upcomingSessions.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setCurrentSlideIndex(idx)}
+                                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                                idx === currentSlideIndex ? 'bg-white w-4' : 'bg-white/50'
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
 
                             {/* Registrations Card - Floating */}
                             <div className="absolute bottom-10 -left-12 bg-white p-5 rounded-xl shadow-[0_15px_30px_rgb(0,0,0,0.15)] z-30 min-w-[220px]">
                                 <div className="flex flex-col">
                                     <div className="mb-3">
-                                        <span className="text-3xl font-bold text-[#8B5CF6]">25</span>
+                                        <span className="text-3xl font-bold text-[#8B5CF6] transition-opacity duration-300">
+                                            {heroEvent.registrations || 0}
+                                        </span>
                                         <span className="text-[#1B2A41] text-lg font-medium ml-2">Registrations</span>
                                     </div>
                                     <div className="flex items-center -space-x-3">
