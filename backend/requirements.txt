@@ -5,6 +5,7 @@ dj-rest-auth
 django-allauth
 python-dotenv
 pymongo
+dnspython
 gunicorn
 psycopg2-binary
 dj-database-url

@@ -1,7 +1,7 @@
 import requests
 import sys
 
-BASE_URL = "http://localhost:8000/api"
+BASE_URL = "https://cdls-ignite-backend.onrender.com/api"
 
 endpoints = [
     "/core/interest/list/",
