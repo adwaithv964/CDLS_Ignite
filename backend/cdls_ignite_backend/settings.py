@@ -180,7 +180,10 @@ if _use_local or not _mongo_uri:
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 else:
     DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
-
+    # Silence the AutoField system check for third-party apps (auth, allauth, contenttypes).
+    # These models use AutoField in their migrations but MongoDB handles them correctly
+    # via DEFAULT_AUTO_FIELD. This check is a false positive for built-in Django apps.
+    SILENCED_SYSTEM_CHECKS = ['django_mongodb_backend.W004', 'mongodb.E001', 'mongodb.W001']
 
 
 # Media files
