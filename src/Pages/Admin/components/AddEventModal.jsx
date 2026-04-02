@@ -24,15 +24,17 @@ const AddEventModal = ({ onClose, onSuccess, event = null }) => {
         time:             event?.time             || '',
         location:         event?.location         || 'CDLS Office',
         author:           event?.author           || '',
-        author_image_url: event?.author_image     || '',  // profile pic stored on event
-        author_member_id: event?.author_member_id || '',  // member ID for reliable lookup
+        author_image_url: '',   // intentionally NOT stored — backend resolves from member_id
+        author_member_id: event?.author_member_id || '',
         dept:             event?.dept             || '',
         status:           event?.status           || 'Open',
         image:            null,
         image_color:      event?.image_color      || 'bg-blue-100',
         is_open:          event?.is_open !== undefined ? event.is_open : true,
     });
-    // Tracks whether the current author field text was matched from autocomplete
+    // avatarPreview: only used for the admin form UI — never sent to the backend
+    const [avatarPreview, setAvatarPreview] = useState(event?.author_image || '');
+    // Tracks whether the current author was matched from the autocomplete
     const [authorMatched, setAuthorMatched] = useState(
         !!(event?.author_image || event?.author_member_id)
     );
@@ -145,21 +147,24 @@ const AddEventModal = ({ onClose, onSuccess, event = null }) => {
     const handleAuthorChange = (e) => {
         // Typing clears the matched-author state — requires re-selection from dropdown
         setAuthorMatched(false);
+        setAvatarPreview('');   // clear preview avatar
         setFormData(prev => ({
             ...prev,
             author:           e.target.value,
-            author_image_url: '',  // clear stored pic when typing manually
+            author_image_url: '',
             author_member_id: '',
         }));
     };
 
     const handleSelectSuggestion = (member) => {
-        // Build the absolute image URL from the member record
-        const imgUrl = member.image_url || '';
+        // Only store the member_id — NOT the image URL.
+        // The backend resolves the image URL dynamically from the member record,
+        // so it always uses the correct hostname (localhost vs production).
+        setAvatarPreview(member.image_url || '');  // UI-only preview
         setFormData(prev => ({
             ...prev,
             author:           member.name,
-            author_image_url: imgUrl,
+            author_image_url: '',             // never persist absolute URLs
             author_member_id: member.id || '',
             dept:             member.institution || prev.dept,
         }));
@@ -356,18 +361,18 @@ const AddEventModal = ({ onClose, onSuccess, event = null }) => {
                                 Organizer (Author)
                             </label>
                             <div className="relative flex items-center gap-2">
-                                {/* Show selected author avatar if a member was matched */}
-                                {authorMatched && formData.author_image_url && (
+                                {/* Show selected author avatar — uses avatarPreview (UI-only, not persisted) */}
+                                {authorMatched && avatarPreview && (
                                     <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border-2 border-teal-400 shadow-sm">
                                         <img
-                                            src={formData.author_image_url}
+                                            src={avatarPreview}
                                             alt={formData.author}
                                             className="w-full h-full object-cover"
                                             onError={(e) => { e.target.style.display = 'none'; }}
                                         />
                                     </div>
                                 )}
-                                {authorMatched && !formData.author_image_url && (
+                                {authorMatched && !avatarPreview && (
                                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-blue-500 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold border-2 border-teal-400 shadow-sm">
                                         {formData.author ? formData.author.charAt(0).toUpperCase() : '?'}
                                     </div>
