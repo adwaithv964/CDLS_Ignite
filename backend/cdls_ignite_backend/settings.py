@@ -181,10 +181,21 @@ if _use_local or not _mongo_uri:
 else:
     DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
     # Silence the AutoField system check for third-party apps (auth, allauth, contenttypes).
-    # These models use AutoField in their migrations but MongoDB handles them correctly
-    # via DEFAULT_AUTO_FIELD. This check is a false positive for built-in Django apps.
     SILENCED_SYSTEM_CHECKS = ['django_mongodb_backend.W004', 'mongodb.E001', 'mongodb.W001']
-
+    # Disable Django's built-in migrations for apps that use AutoField pk.
+    # Forces syncdb which respects DEFAULT_AUTO_FIELD=ObjectIdAutoField.
+    # This prevents the "Model instances without primary key value are unhashable"
+    # error in post_migrate signals (create_permissions) on MongoDB.
+    MIGRATION_MODULES = {
+        'contenttypes': None,
+        'auth': None,
+        'admin': None,
+        'sessions': None,
+        'sites': None,
+        'account': None,
+        'socialaccount': None,
+        'authtoken': None,
+    }
 
 # Media files
 MEDIA_URL = '/media/'
