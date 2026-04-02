@@ -12,7 +12,7 @@ const api = axios.create({
     },
 });
 
-// Add a request interceptor to attach the auth token if it exists
+// ── Request interceptor: attach auth token ────────────────────────────────────
 api.interceptors.request.use(
     (config) => {
         // Check if it's an admin API call
@@ -37,4 +37,25 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// ── Response interceptor: auto-logout on invalid/expired token ────────────────
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const status = error.response?.status;
+        // If the server returns 401 or 403, the stored token is invalid
+        if (status === 401 || status === 403) {
+            const hadAdminToken = !!localStorage.getItem('adminToken');
+            // Clear stale tokens
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('token');
+            // Only redirect if we were on an admin page
+            if (hadAdminToken && window.location.pathname.startsWith('/admin')) {
+                window.location.href = '/admin/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;
+

@@ -50,11 +50,12 @@ const EventsPage = () => {
         time: event.time,
         location: event.location,
         author: event.author,
+        authorImage: event.author_image || null,
         dept: event.dept,
         status: event.status,
         isOpen: event.is_open,
         imageColor: event.image_color,
-        image: event.image
+        image: event.image_url || event.image
     });
 
     // Helper to check if a date is today or in the future
@@ -142,8 +143,12 @@ const EventsPage = () => {
                 </div>
                 <hr className="border-gray-100 mb-4" />
                 <div className="flex items-start space-x-2 text-[10px] text-gray-500 mb-6">
-                    <div className="w-6 h-6 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs font-bold text-gray-500">
-                        {session.author.charAt(0)}
+                    <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs font-bold text-gray-500 overflow-hidden border border-gray-100">
+                        {session.authorImage ? (
+                            <img src={session.authorImage} alt={session.author} className="w-full h-full object-cover" />
+                        ) : (
+                            <span className="text-gray-500">{session.author ? session.author.charAt(0).toUpperCase() : '?'}</span>
+                        )}
                     </div>
                     <div>
                         <p className="font-semibold text-gray-700">By {session.author}</p>

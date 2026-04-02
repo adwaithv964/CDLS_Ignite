@@ -1,16 +1,28 @@
 from rest_framework import generics, permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .models import Event, HostEventRequest, EventRegistration
 from .serializers import EventSerializer, HostEventRequestSerializer, EventRegistrationSerializer
 
 class EventListCreateView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    # potentially keep this authenticated or allow read only (default is IsAuthenticatedOrReadOnly)
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class EventDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class HostEventCreateView(generics.CreateAPIView):
     queryset = HostEventRequest.objects.all()

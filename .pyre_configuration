@@ -4,5 +4,7 @@
   ],
   "search_path": [
     "backend/venv/Lib/site-packages"
-  ]
+  ],
+  "python_version": "3.13",
+  "python_path": "backend/venv/Scripts/python.exe"
 }

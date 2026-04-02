@@ -102,16 +102,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cdls_ignite_backend.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# ── Database ─────────────────────────────────────────────────────────────────
+# Use USE_LOCAL_DB=True in .env to switch to SQLite (e.g. when VPN blocks Atlas)
+# Production (Render) always uses MongoDB Atlas via MONGO_URI.
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django_mongodb_backend',
-        'NAME': 'cdls_ignite',
-        'HOST': os.environ.get('MONGO_URI'),
+_use_local = os.environ.get('USE_LOCAL_DB', 'False') == 'True'
+_mongo_uri  = os.environ.get('MONGO_URI')
+
+if _use_local or not _mongo_uri:
+    # ── Local: SQLite (no network needed) ────────────────────────────────────
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    # ── Production / Atlas: MongoDB ──────────────────────────────────────────
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django_mongodb_backend',
+            'NAME': 'cdls_ignite',
+            'HOST': _mongo_uri,
+        }
+    }
 
 # Update database configuration from environment variable (if available)
 # db_from_env = dj_database_url.config(conn_max_age=600)
@@ -161,7 +175,11 @@ CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
+# Use MongoDB's ObjectId for primary keys in production; BigAutoField for SQLite locally
+if _use_local or not _mongo_uri:
+    DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+else:
+    DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
 
 
 
@@ -188,14 +206,7 @@ REST_FRAMEWORK = {
 
 SITE_ID = 1
 
-# Allauth / DJ Rest Auth Configuration
-# Allauth / DJ Rest Auth Configuration
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email']   
-ACCOUNT_EMAIL_VERIFICATION = 'optional' 
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED = True # Re-adding this as it is standard and required if we rely on email
-
-
-
-
+# Allauth Configuration (Django-allauth v65+)
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # email is required
+ACCOUNT_LOGIN_METHODS = {'email'}          # login via email only
+ACCOUNT_EMAIL_VERIFICATION = 'optional'

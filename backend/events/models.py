@@ -9,6 +9,8 @@ class Event(models.Model):
     time = models.CharField(max_length=50)
     location = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
+    author_image_url = models.URLField(max_length=1000, blank=True, null=True)  # stored when admin selects from autocomplete
+    author_member_id = models.IntegerField(null=True, blank=True)  # FK-like ref to Member.id
     dept = models.CharField(max_length=255)
     status = models.CharField(max_length=20) # Open, Closed
     is_open = models.BooleanField(default=True)
