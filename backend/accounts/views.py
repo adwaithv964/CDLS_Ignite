@@ -1,30 +1,55 @@
 """
 Custom login view that bypasses django-allauth entirely.
 
-dj-rest-auth's default LoginView routes through allauth, which:
-1. Calls filter_users_by_email() — requires a record in allauth_emailaddress
-   (users created via create_superuser() don't have one, so this returns None)
-2. Calls django_login() — writes to django_session (not fully supported on MongoDB)
-
-This view queries the User table directly and uses check_password(), which
-only touches the accounts_customuser collection — fully supported on MongoDB.
+dj-rest-auth's default LoginView routes through allauth, which expects allauth
+email rows and can also touch session storage. This view authenticates directly
+against the User model and returns the same {"key": "..."} payload shape that
+the frontend already expects.
 """
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
 
 User = get_user_model()
+
+
+def _resolve_user_pk(user, email):
+    """
+    Recover a stable primary key for MongoDB-backed users.
+
+    django-mongodb-backend can occasionally return a queried model instance
+    whose in-memory pk is still empty. Passing that object into related ORM
+    filters then raises:
+
+        "Model instances passed to related filters must be saved."
+
+    We avoid that by fetching the raw pk from the queryset and backfilling the
+    instance before token creation.
+    """
+    user_pk = getattr(user, user._meta.pk.attname, None)
+    if user_pk is not None:
+        return user_pk
+
+    user_pk = User.objects.filter(email=email).values_list('pk', flat=True).first()
+    if user_pk is None:
+        user_pk = User.objects.filter(email__iexact=email).values_list('pk', flat=True).first()
+
+    if user_pk is not None:
+        setattr(user, user._meta.pk.attname, user_pk)
+
+    return user_pk
 
 
 class AdminLoginView(APIView):
     """
     POST /api/auth/login/
     Body: { "email": "...", "password": "..." }
-    Returns: { "key": "<token>" }  (same shape as dj-rest-auth)
+    Returns: { "key": "<token>" }
     """
+
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -37,14 +62,9 @@ class AdminLoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # ── Direct DB lookup — exact match on the (already lowercased) email.
-        # We avoid email__iexact because django-mongodb-backend's regex-based
-        # iexact can behave inconsistently; since we lowercased above and the
-        # stored email is also lowercase this is equivalent.
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # Fallback: try with original casing in case DB stored it mixed-case
             try:
                 user = User.objects.get(email__iexact=email)
             except User.DoesNotExist:
@@ -81,9 +101,15 @@ class AdminLoginView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        # Get or create a DRF auth token — no sessions, no allauth tables touched
+        user_pk = _resolve_user_pk(user, email)
+        if user_pk is None:
+            return Response(
+                {'non_field_errors': ['Token creation error: could not resolve user primary key.']},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
         try:
-            token, _ = Token.objects.get_or_create(user=user)
+            token, _ = Token.objects.get_or_create(user_id=user_pk)
         except Exception as e:
             return Response(
                 {'non_field_errors': [f'Token creation error: {str(e)}']},
