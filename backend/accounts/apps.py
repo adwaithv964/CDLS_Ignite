@@ -4,7 +4,11 @@ from django.apps import AppConfig
 
 class AccountsConfig(AppConfig):
     name = 'accounts'
-    default_auto_field = 'django.db.models.BigAutoField'
+    default_auto_field = (
+        'django_mongodb_backend.fields.ObjectIdAutoField'
+        if os.environ.get('USE_LOCAL_DB', 'False') != 'True' and os.environ.get('MONGO_URI')
+        else 'django.db.models.BigAutoField'
+    )
 
     def ready(self):
         """
