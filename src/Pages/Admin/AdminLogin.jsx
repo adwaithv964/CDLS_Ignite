@@ -67,12 +67,15 @@ const AdminLogin = () => {
                 setError(
                     'The server took too long to respond. It may have been sleeping — please try again in a moment.'
                 );
-            } else if (err.response?.status === 403 || err.response?.status === 401) {
-                setError('Login failed. Ensure you have admin privileges.');
             } else {
-                setError('Login failed. Ensure you have admin privileges.');
+                // Show the exact backend error message so we can diagnose DB/auth issues
+                const backendMsg = err.response?.data?.non_field_errors?.[0]
+                    || err.response?.data?.detail
+                    || err.message
+                    || 'Login failed.';
+                setError(backendMsg);
             }
-            console.error(err);
+            console.error('Login error:', err.response?.data || err);
         } finally {
             setLoading(false);
             setWarmingUp(false);
@@ -163,4 +166,3 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
-

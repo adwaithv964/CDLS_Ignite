@@ -37,16 +37,26 @@ class AdminLoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # ── Direct DB lookup — bypasses allauth's AuthenticationBackend which
-        # requires an allauth_emailaddress record that create_superuser() never
-        # creates. We only touch the accounts_customuser collection here.
+        # ── Direct DB lookup — exact match on the (already lowercased) email.
+        # We avoid email__iexact because django-mongodb-backend's regex-based
+        # iexact can behave inconsistently; since we lowercased above and the
+        # stored email is also lowercase this is equivalent.
         try:
-            user = User.objects.get(email__iexact=email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response(
-                {'non_field_errors': ['Unable to log in with provided credentials.']},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            # Fallback: try with original casing in case DB stored it mixed-case
+            try:
+                user = User.objects.get(email__iexact=email)
+            except User.DoesNotExist:
+                return Response(
+                    {'non_field_errors': ['No account found with this email address.']},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            except Exception as e:
+                return Response(
+                    {'non_field_errors': [f'Database error (iexact): {str(e)}']},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
         except Exception as e:
             return Response(
                 {'non_field_errors': [f'Database error: {str(e)}']},
@@ -55,7 +65,7 @@ class AdminLoginView(APIView):
 
         if not user.check_password(password):
             return Response(
-                {'non_field_errors': ['Unable to log in with provided credentials.']},
+                {'non_field_errors': ['Incorrect password.']},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -72,6 +82,12 @@ class AdminLoginView(APIView):
             )
 
         # Get or create a DRF auth token — no sessions, no allauth tables touched
-        token, _ = Token.objects.get_or_create(user=user)
+        try:
+            token, _ = Token.objects.get_or_create(user=user)
+        except Exception as e:
+            return Response(
+                {'non_field_errors': [f'Token creation error: {str(e)}']},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         return Response({'key': token.key}, status=status.HTTP_200_OK)
