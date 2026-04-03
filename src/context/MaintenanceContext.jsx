@@ -34,20 +34,38 @@ const MaintenanceContext = createContext(null);
 export function MaintenanceProvider({ children }) {
     const [settings, setSettings] = useState(loadSettings);
 
-    // Fetch global maintenance settings from backend
+    // Fetch global maintenance settings from backend.
+    // On Render free tier, the first request may fail due to cold start — retry once.
     useEffect(() => {
-        api.get('/core/maintenance/')
-            .then(res => {
-                if (res.data && res.data.pages) {
-                    const newSettings = {
-                        pages: { ...DEFAULT_SETTINGS.pages, ...res.data.pages },
-                        message: res.data.message || DEFAULT_SETTINGS.message,
-                    };
-                    setSettings(newSettings);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
-                }
-            })
-            .catch(err => console.error("Failed to fetch maintenance settings:", err));
+        let cancelled = false;
+
+        const fetchSettings = (attempt = 1) => {
+            api.get('/core/maintenance/', { timeout: 70000 })
+                .then(res => {
+                    if (cancelled) return;
+                    if (res.data && res.data.pages) {
+                        const newSettings = {
+                            pages: { ...DEFAULT_SETTINGS.pages, ...res.data.pages },
+                            message: res.data.message || DEFAULT_SETTINGS.message,
+                        };
+                        setSettings(newSettings);
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
+                    }
+                })
+                .catch(err => {
+                    if (cancelled) return;
+                    const isTimeout = err.code === 'ECONNABORTED' || err.message?.includes('timeout');
+                    if (isTimeout && attempt === 1) {
+                        // Backend was sleeping — retry after a short delay
+                        setTimeout(() => fetchSettings(2), 5000);
+                    } else {
+                        console.error("Failed to fetch maintenance settings:", err);
+                    }
+                });
+        };
+
+        fetchSettings();
+        return () => { cancelled = true; };
     }, []);
 
     const updateSettings = useCallback((newSettings) => {

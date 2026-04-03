@@ -4,13 +4,29 @@ const isLocalhost = window.location.hostname === 'localhost' || window.location.
 const devBaseUrl = 'http://localhost:8000/api';
 const prodBaseUrl = import.meta.env.VITE_API_URL;
 
+// Render free tier can take 30-60 seconds for cold starts.
+// Keep the timeout generous enough to survive a full wake-up cycle.
+const TIMEOUT_MS = isLocalhost ? 10000 : 65000;
+
 const api = axios.create({
     baseURL: isLocalhost ? devBaseUrl : prodBaseUrl,
-    timeout: 10000, // 10 seconds timeout
+    timeout: TIMEOUT_MS,
     headers: {
         'Content-Type': 'application/json',
     },
 });
+
+/**
+ * Proactively wake the Render backend.
+ * Call this early (e.g. on app mount) so the server is warm by the time
+ * the user hits Login. Silently ignores any errors.
+ */
+export async function pingBackend() {
+    if (isLocalhost) return;
+    try {
+        await api.get('/core/maintenance/', { timeout: 65000 });
+    } catch (_) { /* intentionally silent — just warming up */ }
+}
 
 // ── Request interceptor: attach auth token ────────────────────────────────────
 api.interceptors.request.use(
