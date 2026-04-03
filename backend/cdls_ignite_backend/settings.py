@@ -207,15 +207,25 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True # For development only
 
-# DRF Configuration
+# Email backend — required by allauth even when verification is 'optional'.
+# Using the console backend here so no SMTP server is needed.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# DRF Configuration — token-only authentication (no session cookies)
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
+}
+
+# dj-rest-auth — disable session login so django_login() is never called.
+# We only use DRF Token auth, so sessions are not needed and would cause
+# errors on MongoDB (no django_session table).
+REST_AUTH = {
+    'SESSION_LOGIN': False,
 }
 
 SITE_ID = 1
