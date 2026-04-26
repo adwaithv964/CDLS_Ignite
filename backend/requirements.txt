@@ -1,10 +1,12 @@
 asgiref==3.11.1
 certifi==2026.2.25
 charset-normalizer==3.4.5
+cloudinary==1.44.0
 dj-database-url==3.1.2
 dj-rest-auth==7.1.1
 Django==6.0.3
 django-allauth==65.15.0
+django-cloudinary-storage==0.3.0
 django-cors-headers==4.9.0
 django-mongodb-backend==6.0.2
 djangorestframework==3.16.1

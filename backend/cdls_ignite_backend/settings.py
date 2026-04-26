@@ -52,8 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites', # Required by allauth
-    
+
     # Third-party apps
+    'cloudinary',
+    'cloudinary_storage',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -197,9 +199,23 @@ else:
         'authtoken': None,
     }
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# ── Media / File Storage ──────────────────────────────────────────────────────
+# Use Cloudinary in production (when CLOUDINARY_URL env var is set on Render).
+# Falls back to local disk (media/) for local development.
+_cloudinary_url = os.environ.get('CLOUDINARY_URL')
+
+if _cloudinary_url:
+    import cloudinary  # type: ignore[import]
+    cloudinary.config(cloudinary_url=_cloudinary_url)
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    # MEDIA_URL is not used when Cloudinary handles storage,
+    # but keep it defined so existing code that references it doesn't break.
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    # Local development: serve from the local media/ directory.
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
