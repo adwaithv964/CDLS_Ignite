@@ -54,8 +54,6 @@ INSTALLED_APPS = [
     'django.contrib.sites', # Required by allauth
 
     # Third-party apps
-    'cloudinary',
-    'cloudinary_storage',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -70,6 +68,12 @@ INSTALLED_APPS = [
     'events',
     'members',
 ]
+
+# Only register Cloudinary apps when CLOUDINARY_URL is configured (production on Render).
+# Locally, cloudinary packages may not be installed in the venv, so don't import them.
+if os.environ.get('CLOUDINARY_URL'):
+    INSTALLED_APPS = ['cloudinary', 'cloudinary_storage'] + INSTALLED_APPS
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # Added CORS middleware
