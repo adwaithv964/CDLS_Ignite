@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Member
 
 class MemberSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
     image_url = serializers.SerializerMethodField()
 
     class Meta:

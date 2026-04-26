@@ -24,6 +24,27 @@ const EMPTY_FORM = {
     image: null,
 };
 
+const formatApiError = (error, fallback = 'Failed to save member.') => {
+    const data = error?.response?.data;
+
+    if (!data) return fallback;
+
+    if (typeof data === 'string') {
+        if (data.trim().startsWith('<!doctype html') || data.trim().startsWith('<html')) {
+            return fallback;
+        }
+        return data;
+    }
+
+    if (typeof data === 'object') {
+        return Object.entries(data)
+            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+            .join(' | ');
+    }
+
+    return fallback;
+};
+
 const MembersManager = () => {
     const [activeType, setActiveType] = useState('learner');
     const [members, setMembers] = useState([]);
@@ -114,7 +135,7 @@ const MembersManager = () => {
             setShowForm(false);
             fetchMembers();
         } catch (e) {
-            setError(e.response?.data ? JSON.stringify(e.response.data) : 'Failed to save.');
+            setError(formatApiError(e));
         } finally {
             setSaving(false);
         }
@@ -326,6 +347,9 @@ const MembersManager = () => {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Full Name *</label>
                                     <input
+                                        id="member-name"
+                                        name="name"
+                                        autoComplete="name"
                                         value={form.name}
                                         onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                                         className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -335,6 +359,9 @@ const MembersManager = () => {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Entity / Institution / Company</label>
                                     <input
+                                        id="member-institution"
+                                        name="institution"
+                                        autoComplete="organization"
                                         value={form.institution}
                                         onChange={e => setForm(f => ({ ...f, institution: e.target.value }))}
                                         className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -348,6 +375,9 @@ const MembersManager = () => {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Role Tags</label>
                                     <input
+                                        id="member-tags"
+                                        name="tags"
+                                        autoComplete="off"
                                         value={form.tags}
                                         onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
                                         className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -358,6 +388,9 @@ const MembersManager = () => {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Location</label>
                                     <input
+                                        id="member-location"
+                                        name="location"
+                                        autoComplete="address-level2"
                                         value={form.location}
                                         onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
                                         className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -371,6 +404,9 @@ const MembersManager = () => {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Phone</label>
                                     <input
+                                        id="member-phone"
+                                        name="phone"
+                                        autoComplete="tel"
                                         value={form.phone}
                                         onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                                         className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -381,6 +417,9 @@ const MembersManager = () => {
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Email</label>
                                     <input
                                         type="email"
+                                        id="member-email"
+                                        name="email"
+                                        autoComplete="email"
                                         value={form.email}
                                         onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                                         className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -394,6 +433,9 @@ const MembersManager = () => {
                                 <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Profile Details</label>
                                 <textarea
                                     rows={3}
+                                    id="member-profile-details"
+                                    name="profile_details"
+                                    autoComplete="off"
                                     value={form.profile_details}
                                     onChange={e => setForm(f => ({ ...f, profile_details: e.target.value }))}
                                     className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 resize-none"
@@ -405,6 +447,9 @@ const MembersManager = () => {
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Expertise &amp; Skills</label>
                                 <input
+                                    id="member-expertise-skills"
+                                    name="expertise_skills"
+                                    autoComplete="off"
                                     value={form.expertise_skills}
                                     onChange={e => setForm(f => ({ ...f, expertise_skills: e.target.value }))}
                                     className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"

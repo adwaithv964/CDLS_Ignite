@@ -10,7 +10,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     author_image_url = models.URLField(max_length=1000, blank=True, null=True)  # stored when admin selects from autocomplete
-    author_member_id = models.IntegerField(null=True, blank=True)  # FK-like ref to Member.id
+    author_member_id = models.CharField(max_length=64, blank=True, null=True)  # stringified Member.pk works for SQLite and Mongo
     dept = models.CharField(max_length=255)
     status = models.CharField(max_length=20) # Open, Closed
     is_open = models.BooleanField(default=True)

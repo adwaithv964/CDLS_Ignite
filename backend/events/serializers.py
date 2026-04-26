@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Event, HostEventRequest, EventRegistration
 
 class EventSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
+    author_member_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     registrations = serializers.IntegerField(source='registrations_list.count', read_only=True)
     image_url = serializers.SerializerMethodField()
     author_image = serializers.SerializerMethodField()
@@ -61,11 +63,16 @@ class EventSerializer(serializers.ModelSerializer):
         return None
 
 class HostEventRequestSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
+
     class Meta:
         model = HostEventRequest
         fields = '__all__'
 
 class EventRegistrationSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
+    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all(), pk_field=serializers.CharField())
+
     class Meta:
         model = EventRegistration
         fields = '__all__'
