@@ -320,7 +320,7 @@ const EventsPage = () => {
                             )}
 
                             {/* Registrations Card - Floating */}
-                            <div className="absolute bottom-10 -left-12 bg-white p-5 rounded-xl shadow-[0_15px_30px_rgb(0,0,0,0.15)] z-30 min-w-[220px]">
+                            <div className="absolute bottom-10 left-2 lg:-left-12 bg-white p-5 rounded-xl shadow-[0_15px_30px_rgb(0,0,0,0.15)] z-30 min-w-[200px] sm:min-w-[220px]">
                                 <div className="flex flex-col">
                                     <div className="mb-3">
                                         <span className="text-3xl font-bold text-[#8B5CF6] transition-opacity duration-300">
