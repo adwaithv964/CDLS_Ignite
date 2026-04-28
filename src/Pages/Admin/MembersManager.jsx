@@ -56,7 +56,28 @@ const MembersManager = () => {
     const [saving, setSaving] = useState(false);
     const [search, setSearch] = useState('');
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({ phone: '', email: '' });
     const fileRef = useRef();
+
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const handlePhoneChange = (e) => {
+        // Keep only digits, cap at 10
+        const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+        setForm(f => ({ ...f, phone: digits }));
+        setFieldErrors(fe => ({
+            ...fe,
+            phone: digits.length > 0 && digits.length < 10 ? `${digits.length}/10 digits` : ''
+        }));
+    };
+
+    const handleEmailBlur = () => {
+        if (form.email && !EMAIL_REGEX.test(form.email)) {
+            setFieldErrors(fe => ({ ...fe, email: 'Please enter a valid email address.' }));
+        } else {
+            setFieldErrors(fe => ({ ...fe, email: '' }));
+        }
+    };
 
     const fetchMembers = async () => {
         setLoading(true);
@@ -83,6 +104,7 @@ const MembersManager = () => {
         setImagePreview(null);
         setEditingId(null);
         setError('');
+        setFieldErrors({ phone: '', email: '' });
         setShowForm(true);
     };
 
@@ -102,6 +124,7 @@ const MembersManager = () => {
         setImagePreview(member.image_url || null);
         setEditingId(member.id);
         setError('');
+        setFieldErrors({ phone: '', email: '' });
         setShowForm(true);
     };
 
@@ -114,6 +137,14 @@ const MembersManager = () => {
 
     const handleSave = async () => {
         if (!form.name.trim()) { setError('Name is required.'); return; }
+        if (form.phone && form.phone.length !== 10) {
+            setFieldErrors(fe => ({ ...fe, phone: 'Phone number must be exactly 10 digits.' }));
+            return;
+        }
+        if (form.email && !EMAIL_REGEX.test(form.email)) {
+            setFieldErrors(fe => ({ ...fe, email: 'Please enter a valid email address.' }));
+            return;
+        }
         setSaving(true);
         setError('');
         try {
@@ -406,12 +437,29 @@ const MembersManager = () => {
                                     <input
                                         id="member-phone"
                                         name="phone"
+                                        type="tel"
+                                        inputMode="numeric"
                                         autoComplete="tel"
                                         value={form.phone}
-                                        onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                                        className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
-                                        placeholder="e.g. +91 9876543210"
+                                        onChange={handlePhoneChange}
+                                        maxLength={10}
+                                        className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+                                            fieldErrors.phone && form.phone.length < 10 && form.phone.length > 0
+                                                ? 'border-red-400 focus:ring-red-200'
+                                                : form.phone.length === 10
+                                                    ? 'border-green-400 focus:ring-green-200'
+                                                    : 'focus:ring-orange-200'
+                                        }`}
+                                        placeholder="10-digit number"
                                     />
+                                    <div className="flex justify-between mt-1">
+                                        {fieldErrors.phone ? (
+                                            <p className="text-xs text-red-500">{fieldErrors.phone}</p>
+                                        ) : <span />}
+                                        <p className={`text-xs ml-auto ${
+                                            form.phone.length === 10 ? 'text-green-500' : 'text-gray-400'
+                                        }`}>{form.phone.length}/10</p>
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Email</label>
@@ -421,10 +469,23 @@ const MembersManager = () => {
                                         name="email"
                                         autoComplete="email"
                                         value={form.email}
-                                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                                        className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
+                                        onChange={e => {
+                                            setForm(f => ({ ...f, email: e.target.value }));
+                                            if (fieldErrors.email) setFieldErrors(fe => ({ ...fe, email: '' }));
+                                        }}
+                                        onBlur={handleEmailBlur}
+                                        className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+                                            fieldErrors.email
+                                                ? 'border-red-400 focus:ring-red-200'
+                                                : 'focus:ring-orange-200'
+                                        }`}
                                         placeholder="e.g. name@example.com"
                                     />
+                                    {fieldErrors.email && (
+                                        <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                                            <span>⚠</span> {fieldErrors.email}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
