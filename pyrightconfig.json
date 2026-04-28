@@ -7,7 +7,8 @@
     "**/node_modules",
     "**/__pycache__"
   ],
-  "pythonPath": "backend/venv/Scripts/python.exe",
+  "venvPath": "backend",
+  "venv": "venv",
   "pythonVersion": "3.13",
   "pythonPlatform": "Windows",
   "typeCheckingMode": "basic",

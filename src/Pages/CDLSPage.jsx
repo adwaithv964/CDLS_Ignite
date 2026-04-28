@@ -22,18 +22,18 @@ const CDLSPage = () => {
         <div className="bg-white min-h-screen font-sans">
             <Header />
 
-            <main className="pt-8 pb-16">
+            <main className="pt-36 md:pt-8 pb-16">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Top Buttons Section */}
-                    <div className="flex flex-wrap justify-between items-center mb-12 gap-4">
-                        <button className="bg-[#FF4D4D] text-white px-6 py-3 rounded text-sm font-bold tracking-wider uppercase shadow-md hover:bg-red-600 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-12 gap-3">
+                        <button className="bg-[#FF4D4D] text-white px-6 py-3 rounded text-sm font-bold tracking-wider uppercase shadow-md hover:bg-red-600 transition-colors w-full sm:w-auto">
                             KSUM PARTNERED
                         </button>
 
                         <button
                             onClick={handleBookClick}
-                            className="bg-gradient-to-r from-[#7B5AFF] to-[#5F3DC4] text-white px-8 py-3 rounded-full font-bold flex items-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                            className="bg-gradient-to-r from-[#7B5AFF] to-[#5F3DC4] text-white px-8 py-3 rounded-full font-bold flex items-center justify-center shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 w-full sm:w-auto"
                         >
                             Book Now <ArrowRight size={18} className="ml-2" />
                         </button>
