@@ -19,6 +19,7 @@ import InquiriesManager from './Pages/Admin/InquiriesManager';
 import SubscribersManager from './Pages/Admin/SubscribersManager';
 import MaintenanceManager from './Pages/Admin/MaintenanceManager';
 import MembersManager from './Pages/Admin/MembersManager';
+import SiteStatsManager from './Pages/Admin/SiteStatsManager';
 
 function App() {
     return (
@@ -46,6 +47,7 @@ function App() {
                             <Route path="subscribers" element={<SubscribersManager />} />
                             <Route path="maintenance" element={<MaintenanceManager />} />
                             <Route path="members" element={<MembersManager />} />
+                            <Route path="site-stats" element={<SiteStatsManager />} />
                         </Route>
                     </Routes>
                 </div>

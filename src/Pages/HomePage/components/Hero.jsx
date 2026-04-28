@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import api from '../../../api/axios';
 
 const Hero = () => {
+    const [stats, setStats] = useState({
+        learners_count: 25,
+        learners_suffix: '+',
+        communities_count: 35,
+        communities_suffix: '+',
+    });
+
+    useEffect(() => {
+        api.get('/core/site-stats/')
+            .then(res => setStats(res.data))
+            .catch(() => { /* keep defaults */ });
+    }, []);
+
     return (
         <section className="relative bg-gradient-to-r from-[#FFF5F2] to-[#E6F9F6] pt-40 md:pt-16 pb-12 md:pb-20 overflow-hidden">
 
@@ -46,7 +60,9 @@ const Hero = () => {
                         {/* Learners statistic badge */}
                         <div className="absolute top-4 md:top-10 left-0 bg-white p-2 md:p-3 pr-4 md:pr-5 rounded-full shadow-lg z-20 flex items-center space-x-2 md:space-x-3 animate-float-delayed transform scale-90 md:scale-100 origin-left">
                             <div className="text-left leading-tight pl-2">
-                                <span className="block font-bold text-[#5D5FEF] text-base md:text-lg">25+</span>
+                                <span className="block font-bold text-[#5D5FEF] text-base md:text-lg">
+                                    {stats.learners_count}{stats.learners_suffix}
+                                </span>
                                 <span className="text-[10px] md:text-xs font-semibold text-gray-600">Learners</span>
                             </div>
                             <div className="flex -space-x-2">
@@ -85,7 +101,9 @@ const Hero = () => {
 
                         {/* Communities statistic badge */}
                         <div className="absolute bottom-10 md:bottom-20 right-0 md:-right-4 lg:right-0 bg-white p-3 md:p-4 px-4 md:px-6 rounded-full shadow-lg z-30 flex flex-col items-center animate-float transform scale-90 md:scale-100 origin-right">
-                            <span className="font-bold text-[#00D2AA] text-xl md:text-2xl">35+</span>
+                            <span className="font-bold text-[#00D2AA] text-xl md:text-2xl">
+                                {stats.communities_count}{stats.communities_suffix}
+                            </span>
                             <span className="text-[10px] md:text-xs font-semibold text-gray-500">Communities</span>
                         </div>
 

@@ -14,7 +14,8 @@ import {
     UserCheck,
     Bell,
     Menu,
-    X
+    X,
+    BarChart3
 } from 'lucide-react';
 import api from '../../api/axios';
 
@@ -73,6 +74,7 @@ const AdminLayout = () => {
         { path: '/admin/inquiries', icon: <Mail size={20} />, label: 'Contact Inquiries' },
         { path: '/admin/subscribers', icon: <Rss size={20} />, label: 'Subscribers' },
         { path: '/admin/maintenance', icon: <Wrench size={20} />, label: 'Maintenance' },
+        { path: '/admin/site-stats', icon: <BarChart3 size={20} />, label: 'Site Stats' },
     ];
 
     return (

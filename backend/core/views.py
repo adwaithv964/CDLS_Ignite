@@ -349,3 +349,46 @@ def maintenance_settings_mongo(request):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+SITE_STATS_FILE = os.path.join(settings.BASE_DIR, 'site_stats.json')
+
+DEFAULT_SITE_STATS = {
+    "learners_count": 25,
+    "learners_suffix": "+",
+    "communities_count": 35,
+    "communities_suffix": "+",
+}
+
+@csrf_exempt
+@api_view(['GET', 'POST', 'OPTIONS'])
+@authentication_classes([])
+@permission_classes([permissions.AllowAny])
+def site_stats_mongo(request):
+    """
+    Stores hero-section display counts (Learners / Communities) in a local
+    JSON file — same pattern as maintenance_settings so it is always available.
+    """
+    if request.method == 'GET':
+        try:
+            if os.path.exists(SITE_STATS_FILE):
+                with open(SITE_STATS_FILE, 'r') as f:
+                    data = json.load(f)
+                return Response(data, status=status.HTTP_200_OK)
+            return Response(DEFAULT_SITE_STATS, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    elif request.method == 'POST':
+        try:
+            data = request.data
+            payload = {
+                "learners_count":     int(data.get("learners_count", DEFAULT_SITE_STATS["learners_count"])),
+                "learners_suffix":    str(data.get("learners_suffix", DEFAULT_SITE_STATS["learners_suffix"])),
+                "communities_count":  int(data.get("communities_count", DEFAULT_SITE_STATS["communities_count"])),
+                "communities_suffix": str(data.get("communities_suffix", DEFAULT_SITE_STATS["communities_suffix"])),
+            }
+            with open(SITE_STATS_FILE, 'w') as f:
+                json.dump(payload, f)
+            return Response({"message": "Site stats updated successfully"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
