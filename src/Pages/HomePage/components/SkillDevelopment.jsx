@@ -42,11 +42,12 @@ const SkillDevelopment = () => {
                         time: event.time,
                         location: event.location,
                         author: event.author,
+                        authorImage: event.author_image || null,
                         dept: event.dept,
                         status: event.status,
                         isOpen: event.is_open,
                         imageColor: event.image_color || "bg-gray-100",
-                        image: event.image
+                        image: event.image_url || event.image
                     }));
 
                 setSessions(mappedSessions);
@@ -161,9 +162,12 @@ const SkillDevelopment = () => {
                                     <hr className="border-gray-100 mb-4" />
 
                                     <div className="flex items-start space-x-3 text-[10px] text-gray-500 mb-6">
-                                        <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden text-center flex items-center justify-center font-bold text-gray-500">
-                                            {/* Avatar Icon */}
-                                            {session.author ? session.author.charAt(0) : '?'}
+                                        <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden text-center flex items-center justify-center font-bold text-gray-500 border border-gray-100">
+                                            {session.authorImage ? (
+                                                <img src={session.authorImage} alt={session.author} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <span>{session.author ? session.author.charAt(0).toUpperCase() : '?'}</span>
+                                            )}
                                         </div>
                                         <div>
                                             <p className="font-bold text-gray-700">By {session.author}</p>
