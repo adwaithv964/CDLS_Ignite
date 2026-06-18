@@ -7,7 +7,7 @@ const AdvisoryPanel = () => {
             name: "FAWAS SHAMEEM T K",
             role: "Secretary - Thamarassery",
             location: "Grama Panchayat",
-            image: "/assets/guidence_img_2.jpeg"
+            image: "/assets/guidence_img_2.jpg"
         },
         {
             name: "Jaisen Nedumpala",
@@ -20,12 +20,6 @@ const AdvisoryPanel = () => {
             role: "Co-Founder",
             location: "TinkerSpace",
             image: "/assets/guidence_img_3.jpg"
-        },
-        {
-            name: "RONY K ROY",
-            role: "Senior Tech Fellow",
-            location: "KSUM",
-            image: "/assets/guidence_img_4.jpg"
         }
     ];
 
